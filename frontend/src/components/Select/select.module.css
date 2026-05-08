@@ -1,0 +1,118 @@
+/* Select Personalizado */
+.selectContainer {
+  /* Definição de cores sólidas para não depender do fundo */
+  /* Cinza bem clarinho para o fundo */
+  /* --bg-color: #f8f9fa;  */
+
+  /* Texto quase preto */
+  /* --text-color: #212529; */
+
+  /* Cor da divisão da seta */
+  /* --accent-color: #dee2e6; */
+
+  /* Cor da seta */
+  /* --arrow-color: #495057;  */
+
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  margin-top: 20px;
+}
+
+.legend {
+  color: #ed2590 !important;
+  font-size: 14px;
+}
+
+.customSelect {
+  appearance: none;
+  border: 2px solid var(--select-accent-color);
+  outline: 0;
+  font: inherit;
+
+  width: 100%;
+  max-width: 25rem;
+  padding: 0.8rem 4rem 0.8rem 1rem;
+
+  /* Usando uma seta SVG embutida (Data URI) para não depender de link externo */
+  background-image:
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%23666' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E"),
+    linear-gradient(
+      to left,
+      var(--select-accent-color) 3em,
+      var(--select-bg-color) 3em
+    );
+
+  background-repeat: no-repeat;
+  background-position:
+    right 0.8em center,
+    right;
+  background-size: 1.2em, 100%;
+
+  color: var(--select-text-color);
+  border-radius: 6px;
+  cursor: pointer;
+  transition: border-color 0.2s;
+
+  margin-bottom: 2px;
+}
+
+.customSelectError {
+  appearance: none;
+  border: 2px solid #d52f2f;
+  outline: 0;
+  font: inherit;
+
+  width: 100%;
+  max-width: 25rem;
+  padding: 0.8rem 4rem 0.8rem 1rem;
+
+  /* Usando uma seta SVG embutida (Data URI) para não depender de link externo */
+  background-image:
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%23666' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E"),
+    linear-gradient(
+      to left,
+      var(--select-accent-color) 3em,
+      var(--select-bg-color) 3em
+    );
+
+  background-repeat: no-repeat;
+  background-position:
+    right 0.8em center,
+    right;
+  background-size: 1.2em, 100%;
+
+  color: var(--select-text-color);
+  border-radius: 6px;
+  cursor: pointer;
+  transition: border-color 0.2s;
+
+  margin-bottom: 2px;
+}
+
+/* TEMA ESCURO */
+/* O :global deve vir antes para pegar o atributo do <html> ou <body> */
+:global([data-theme="dark"]) .customSelect {
+  /* Seta Clara (%23ffffff) para o fundo escuro */
+  background-image:
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%23152232' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E"),
+    linear-gradient(
+      to left,
+      var(--select-accent-color) 3em,
+      var(--select-bg-color) 3em
+    );
+}
+
+.customSelect:focus {
+  border-color: #0377b9; /* Azul de destaque ao clicar */
+}
+
+.customSelect option {
+  background-color: var(--select-bg-color);
+  color: var(--select-text-color);
+}
+
+.errorSelect {
+  color: #d52f2f;
+  font-size: 13px;
+}

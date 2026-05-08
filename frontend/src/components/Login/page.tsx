@@ -13,7 +13,7 @@ import { ToastContainer, toast } from "react-toastify";
 import styles from "./login.module.css";
 
 // Componentes
-import { Input } from "../Input/page";
+import { InputComponent } from "../Input/page";
 
 // Schema Zod para SignIn
 const CreateSignInSchema = z.object({
@@ -70,7 +70,7 @@ function LoginComponent() {
         </h1>
 
         <form onSubmit={handleSubmit(handleSignIn)} autoComplete="off">
-          <Input
+          <InputComponent
             inputLabel="Email"
             inputType="email"
             inputID="email"
@@ -79,7 +79,7 @@ function LoginComponent() {
             error={errors.email?.message}
           />
 
-          <Input
+          <InputComponent
             inputLabel="Senha"
             inputType="password"
             inputID="password"

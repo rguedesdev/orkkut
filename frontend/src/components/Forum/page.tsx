@@ -178,6 +178,30 @@ function ForumComponent() {
 
         <hr className={styles.forumHrFaded} />
 
+        <div className={styles.topicContainer}>
+          <Image
+            className={styles.forumPicture}
+            src={Kon}
+            alt="Forum Picture"
+            width={0}
+            height={0}
+            priority
+          />
+          <div className={styles.topicTexts}>
+            <h3 className={styles.topicTitle}>
+              <MdShortText size={30} />
+              <span>Capítulo 155: Túmulo dos Vagalumes</span>
+            </h3>
+
+            <p className={styles.topicInfo}>
+              <IoChatboxEllipsesOutline size={22} />
+              <span>20 Respostas</span>
+            </p>
+          </div>
+        </div>
+
+        <hr className={styles.forumHrFaded} />
+
         <Link
           className={styles.seeAllForuns}
           href={`/`}

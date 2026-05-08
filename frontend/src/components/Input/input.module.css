@@ -6,11 +6,11 @@
 
 .fieldset {
   border: 1px solid rgba(2, 93, 146, 0.4);
-  border-radius: 4px;
+  border-radius: 6px;
   position: relative;
 
   /* Adicione estas linhas: */
-  background-color: #ffffff;
+  background-color: var(--input-bg-color);
   padding: 0 8px;
   margin: 0;
 
@@ -19,22 +19,22 @@
 
 .fieldset:focus-within {
   border: 1px solid #0377b9;
-  box-shadow: 0 0 6px rgba(3, 119, 185, 0.5);
+  /* box-shadow: 0 0 6px rgba(3, 119, 185, 0.5); */
 }
 
 .fieldsetError {
-  border: solid 2px #ed2590;
-  border-radius: 4px;
+  border: solid 2px #d52f2f;
+  border-radius: 6px;
   position: relative;
 
-  background-color: #ffffff;
+  /* background-color: #ffffff; */
   padding: 0 8px;
   margin: 0;
 }
 
 .legend {
   font-size: 14px;
-  padding: 0;
+  padding: 0 2px;
   color: #ed2590;
   margin-left: 8px;
   /* Se quiser que o fundo da legenda também seja branco para não cortar a linha: */
@@ -58,6 +58,6 @@
 
 .errorMessage {
   margin-top: 5px;
-  color: #ed2590;
+  color: #d52f2f;
   font-size: 13px;
 }

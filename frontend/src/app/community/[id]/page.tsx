@@ -16,11 +16,13 @@ import { CommunityDetailsComponent } from "@/components/CommunityDetails/page";
 import { ForumComponent } from "@/components/Forum/page";
 import { CommunityMembersComponent } from "@/components/CommunityMembers/page";
 import { RelatedCommunitiesComponent } from "@/components/RelatedCommunities/page";
-import { div, style } from "framer-motion/client";
 
 function CommunityPage() {
   const [isLoading, setIsLoading] = useState(true);
-  const [community, setCommunity] = useState({});
+  const [community, setCommunity] = useState(null);
+  const [isOwner, setIsOwner] = useState(false);
+
+  console.log("COMUNIDADE", community);
 
   const { id } = useParams();
 
@@ -30,6 +32,13 @@ function CommunityPage() {
     const fetchCommunity = async () => {
       try {
         const token = localStorage.getItem("token");
+        const loggedUserId = localStorage.getItem("userID");
+
+        // Se não tem token, nem tenta a requisição
+        if (!token) {
+          console.error("Token não encontrado");
+          return;
+        }
 
         const response = await api.post(
           "/graphql",
@@ -37,19 +46,26 @@ function CommunityPage() {
             query: `
               query Community($id: ID!) {
                 community(id: $id) {
+                  ownerID
                   id
                   name
                   description
+                  members
+                  createdAt
                   category
                   privacy
-                  members
+                  country
+                  language
                 }
               }
             `,
             variables: { id },
           },
           {
-            headers: token ? { Authorization: `Bearer ${token}` } : undefined,
+            // O TOKEN PRECISA ESTAR AQUI!
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
           },
         );
 
@@ -58,7 +74,18 @@ function CommunityPage() {
           return;
         }
 
-        setCommunity(response.data.data.community);
+        const communityData = response.data.data.community;
+        setCommunity(communityData);
+
+        // Agora a comparação vai funcionar porque os dados de fato chegaram
+        if (loggedUserId && communityData?.ownerID) {
+          const s1 = String(loggedUserId).trim().replace(/[\\"]/g, "");
+          const s2 = String(communityData.ownerID).trim().replace(/[\\"]/g, "");
+
+          const matches = s1 === s2;
+
+          setIsOwner(matches);
+        }
       } catch (error) {
         console.error("Erro ao buscar comunidade:", error);
       } finally {
@@ -76,7 +103,7 @@ function CommunityPage() {
   return (
     <div className={styles.page}>
       <main className={styles.communityContainer}>
-        <CommunityBasicInfoComponent community={community} />
+        <CommunityBasicInfoComponent community={community} owner={isOwner} />
         <div className={styles.communityCentralContainer}>
           <CommunityDetailsComponent community={community} />
           <ForumComponent />

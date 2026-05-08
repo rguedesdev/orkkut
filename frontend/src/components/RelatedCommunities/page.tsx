@@ -13,12 +13,20 @@ import Frieren from "../../../public/frieren.jpg";
 
 function RelatedCommunitiesComponent() {
   const relatedCommunities = [
-    { img: Frieren, name: "Otakus da Zona Sul - SP" },
-    { img: Frieren, name: "Sousou no Frieren" },
-    { img: Frieren, name: "Otakus ZS" },
-    { img: Frieren, name: "Otakus da Zona Sul - SP" },
-    { img: Frieren, name: "Sousou no Frieren" },
-    { img: Frieren, name: "Otakus ZS" },
+    {
+      id: "694a03aef4a7c3637cd44a66",
+      img: Frieren,
+      name: "Otakus da ZS/SP",
+    },
+    { id: "694a03aef4a7c3637cd44a66", img: Frieren, name: "Sousou no Frieren" },
+    { id: "694a03aef4a7c3637cd44a66", img: Frieren, name: "Otakus ZS" },
+    {
+      id: "694a03aef4a7c3637cd44a66",
+      img: Frieren,
+      name: "Otakus da Zona Sul - SP",
+    },
+    { id: "694a03aef4a7c3637cd44a66", img: Frieren, name: "Sousou no Frieren" },
+    { id: "694a03aef4a7c3637cd44a66", img: Frieren, name: "Otakus ZS" },
   ];
 
   return (
@@ -26,21 +34,29 @@ function RelatedCommunitiesComponent() {
       <h2 className={styles.relatedCommunityTitle}>Comunidades Relacionadas</h2>
 
       <ul className={styles.relatedCommunities}>
-        {relatedCommunities.map((relatedCommunity, index) => (
-          <li key={index} className={styles.relatedCommunityContainer}>
-            <figure className={styles.relatedCommunityInfo}>
-              <Image
-                className={styles.relatedCommunityPicture}
-                src={relatedCommunity.img}
-                alt={relatedCommunity.name}
-                width={0}
-                height={0}
-                priority
-              />
-              <figcaption className={styles.relatedCommunityName}>
-                {relatedCommunity.name}
-              </figcaption>
-            </figure>
+        {relatedCommunities.map((relatedCommunity) => (
+          <li
+            key={relatedCommunity.id}
+            className={styles.relatedCommunityContainer}
+          >
+            <Link
+              className={styles.linkRelatedCommunity}
+              href={`/community/${relatedCommunity.id}`}
+            >
+              <figure className={styles.relatedCommunityInfo}>
+                <Image
+                  className={styles.relatedCommunityPicture}
+                  src={relatedCommunity.img}
+                  alt={relatedCommunity.name}
+                  width={0}
+                  height={0}
+                  priority
+                />
+                <figcaption className={styles.relatedCommunityName}>
+                  {relatedCommunity.name}
+                </figcaption>
+              </figure>
+            </Link>
           </li>
         ))}
       </ul>

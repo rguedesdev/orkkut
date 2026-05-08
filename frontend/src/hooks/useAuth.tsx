@@ -147,16 +147,19 @@ function useAuth() {
   async function authUser(data: TAuthPayload) {
     setUserAuthenticated(true);
 
-    // Salva token e ID no localStorage
+    // Salva token localStorage
     localStorage.setItem("token", data.token);
 
     // Configura Axios para enviar token em futuras requisições
     api.defaults.headers.Authorization = `Bearer ${data.token}`;
 
-    const userId = data.user.id;
+    const userID = data.user.id;
+
+    // Salva o userID no localStorage
+    localStorage.setItem("userID", userID);
 
     // Redireciona para a página do usuário
-    router.push(`/profile/${userId}`);
+    router.push(`/profile/${userID}`);
   }
 
   return {

@@ -107,7 +107,7 @@ function SearchMain() {
         <>
           <h2 className={styles.resultTitle}>Comunidades encontradas:</h2>
 
-          <div className={styles.usersResultContainer}>
+          <div className={styles.usersCommunitiesResultContainer}>
             {results.communities.map((community) => (
               <div
                 key={community.id}
@@ -138,7 +138,7 @@ function SearchMain() {
         <>
           <h2 className={styles.resultTitle}>Usuários encontrados:</h2>
 
-          <div className={styles.usersResultContainer}>
+          <div className={styles.usersCommunitiesResultContainer}>
             {results.users.map((user) => (
               <div
                 key={`${user.id}`}

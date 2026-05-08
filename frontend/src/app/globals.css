@@ -23,6 +23,12 @@ body,
   --hr-color: #ed2590;
   --seeAll-color: #0377b9;
   --seeAllHover-color: #ed2590;
+  --bg-rgba-card: rgba(0, 0, 0, 0.05);
+  --input-bg-color: #ffffff;
+  --select-bg-color: #f8f9fa;
+  --select-accent-color: #dee2e6;
+  --select-arrow-color: #495751;
+  --select-text-color: #212529;
 }
 
 /* Tema Escuro */
@@ -39,6 +45,12 @@ body,
   --hr-color: #0377b9;
   --seeAll-color: #ed2590;
   --seeAllHover-color: #0377b9;
+  --bg-rgba-card: rgba(255, 255, 255, 0.05);
+  --input-bg-color: #152232;
+  --select-bg-color: #223245;
+  --select-accent-color: #32475f;
+  --select-arrow-color: #152232;
+  --select-text-color: #c1c1c1;
 }
 
 body {

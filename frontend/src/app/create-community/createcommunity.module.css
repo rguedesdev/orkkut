@@ -24,30 +24,38 @@
   text-align: center;
   margin-bottom: 20px;
 }
-.btnCreate {
-  display: block;
-  margin-inline: auto;
-  margin-top: 40px;
-  padding: 10px 100px;
-  background-color: var(--link-color);
-  color: #fff;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-}
 
 .fieldset {
   border: 1px solid rgba(2, 93, 146, 0.4);
-  border-radius: 4px;
+  border-radius: 6px;
+  /* background-color: #223245; */
   padding: 0 10px 5px;
   position: relative;
-  margin-bottom: 10px;
+  margin-bottom: 2px;
+
+  transition: all 0.2s ease;
+}
+
+.fieldset:focus-within {
+  border: 1px solid #0377b9;
+  /* box-shadow: 0 0 6px rgba(3, 119, 185, 0.5); */
+}
+
+.fieldsetError {
+  border: solid 2px #d52f2f;
+  border-radius: 6px;
+  position: relative;
+
+  /* background-color: #ffffff; */
+  padding: 0 8px;
+  margin: 0;
 }
 
 .legend {
   font-size: 14px;
-  padding: 0 5px;
+  padding: 0 2px;
   color: #ed2590;
+  margin-left: 8px;
 }
 
 .textarea {
@@ -55,7 +63,7 @@
   outline: none;
   width: 100%;
   min-height: 100px;
-  padding-top: 20px;
+  padding-top: 10px;
   background: transparent;
 }
 
@@ -64,7 +72,41 @@
   color: #999;
 }
 
-.error {
-  color: #ed2590;
+.errorTextarea {
+  color: #d52f2f;
   font-size: 13px;
+}
+
+.selectsContainer {
+  display: flex;
+  flex-direction: row;
+  gap: 20px;
+}
+
+.btnCreate {
+  display: block;
+  margin-inline: auto;
+  margin-top: 40px;
+  padding: 12px 100px; /* Aumentei levemente o padding vertical para melhor equilíbrio */
+  background-color: var(--link-color);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 600; /* Um pouco de peso na fonte ajuda no botão principal */
+
+  /* Transição suave para todas as propriedades */
+  transition: all 0.2s ease-in-out;
+}
+
+.btnCreate:hover {
+  /* No hover, ele brilha um pouco mais e sobe levemente */
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+.btnCreate:active {
+  /* Em vez de scaleX, usamos scale total ou voltamos o translateY */
+  transform: scale(0.96); /* Diminui o botão por inteiro uniformemente */
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
 }

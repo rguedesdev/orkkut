@@ -13,7 +13,7 @@ interface IInput {
   error?: string;
 }
 
-function Input({
+function InputComponent({
   inputLabel,
   inputType,
   inputID,
@@ -40,4 +40,4 @@ function Input({
   );
 }
 
-export { Input };
+export { InputComponent };

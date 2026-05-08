@@ -1,15 +1,16 @@
 /* Contêiner ocupa 100% da tela e centraliza o loader */
 .loadingContainer {
+  min-height: 100vh;
   position: fixed; /* cobre a tela inteira */
   top: 0;
   left: 0;
   width: 100vw;
   height: 100vh;
   display: flex;
-  justify-content: center; /* centraliza horizontal */
-  align-items: center; /* centraliza vertical */
-  background-color: #ffffff; /* fundo da tela (opcional) */
-  z-index: 9999; /* garante que fique acima de tudo */
+  justify-content: center;
+  align-items: center;
+  background-color: var(--bg-color);
+  z-index: 9999;
 }
 
 /* Loader com dois anéis */

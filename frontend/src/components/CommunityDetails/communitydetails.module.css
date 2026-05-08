@@ -64,3 +64,8 @@
   margin-top: 20px;
   margin-bottom: 20px;
 }
+
+/* Primeira letra maiuscula */
+.capitalize {
+  text-transform: capitalize;
+}

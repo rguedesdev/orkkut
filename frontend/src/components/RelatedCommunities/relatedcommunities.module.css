@@ -30,6 +30,7 @@
 }
 
 .relatedCommunityContainer {
+  list-style: none;
   display: flex;
   flex-direction: column;
   align-items: center; /* centraliza imagem + nome dentro do bloco */
@@ -38,27 +39,54 @@
   gap: 5px; /* espaço entre imagem e nome */
 }
 
+.linkRelatedCommunity {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-decoration: none;
+
+  width: 130px;
+  padding: 15px 20px;
+  border-radius: 8px;
+
+  transition: background-color 0.2s ease;
+}
+
+.linkRelatedCommunity:hover {
+  background-color: var(--bg-rgba-card);
+}
+
 .relatedCommunityInfo {
   display: flex;
   flex-direction: column;
   align-items: center; /* centraliza imagem + nome horizontalmente */
-  gap: 5px; /* espaço entre imagem e nome */
+  gap: 8px; /* espaço entre imagem e nome */
+  margin: 0; /* Remove margens padrão do figure */
+  width: 100%;
 }
 
 .relatedCommunityPicture {
-  width: 80px;
-  height: 120px;
   border-radius: 5px;
   object-fit: cover;
-  display: block;
+
+  /* Importante: manter tamanho fixo para não esmagar */
+  width: 80px;
+  height: 120px;
 }
 
 .relatedCommunityName {
   color: var(--text-primary);
-  font-size: 0.95rem;
   text-align: center; /* centraliza o nome dentro do bloco */
-  margin: 0;
-  word-break: break-word; /* evita que nomes longos quebrem o layout */
+  font-size: 15px;
+  font-weight: 500;
+  line-height: 1.2;
+
+  /* Garante que nomes longos não quebrem o card */
+  display: -webkit-box;
+  -webkit-line-clamp: 2; /* No máximo 2 linhas */
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  word-break: break-word;
 }
 
 .relatedCommunityHrFaded {
