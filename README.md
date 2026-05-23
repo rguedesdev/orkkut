@@ -17,10 +17,6 @@
 
 Este é um projeto de redesign e modernização da antiga rede social **Orkut**. Não é apenas um clone, é uma reimaginação de como seria o Orkut se tivesse persistido ao tempo e uma homenagem.
 
-## 🎯 Objetivo
-
-Desenvolvido para compor meu portfólio, este projeto teve como propósito **aplicar boas práticas modernas de desenvolvimento web**, reforçar minhas habilidades técnicas e **aprofundar conhecimentos em arquitetura, deploy e escalabilidade**.
-
 ## ✨ Features
 
 ### ✅ Implementadas
@@ -60,7 +56,7 @@ Desenvolvido para compor meu portfólio, este projeto teve como propósito **apl
 
 - Em breve...
 
-## <img src="https://raw.githubusercontent.com/FortAwesome/Font-Awesome/6.x/svgs/solid/image.svg" width="22" style="filter: invert(1)" /> Prints do Projeto
+## 🖼️ Prints do Projeto
 
 - Em breve...
 

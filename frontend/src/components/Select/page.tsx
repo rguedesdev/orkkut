@@ -28,7 +28,7 @@ function SelectComponent({ selectLabel, register, options, error }: ISelect) {
         className={`${error ? `${styles.customSelectError}` : `${styles.customSelect}`}`}
         {...register}
       >
-        <option value="">Selecione uma categoria...</option>
+        <option value="">Selecione uma opção...</option>
         {options.map((option) => (
           // Usamos option.value para o sistema e option.label para o humano
           <option key={option.value} value={option.value}>

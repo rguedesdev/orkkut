@@ -34,8 +34,8 @@ function useAuth() {
     password: string,
   ): Promise<TAuthPayload> {
     const mutation = `
-    mutation signIn($input: SignInInput!) {
-      signIn(input: $input) {
+    mutation signIn($data: SignInInput!) {
+      signIn(data: $data) {
         user {
           id
           name
@@ -46,7 +46,7 @@ function useAuth() {
     }
   `;
 
-    const variables = { input: { email, password } };
+    const variables = { data: { email, password } };
 
     try {
       const response = await api.post("/graphql", {
@@ -93,8 +93,8 @@ function useAuth() {
   ) {
     try {
       const mutation = `
-        mutation signUp($input: SignUpInput!, $confirmPassword: String!) {
-          signUp(input: $input, confirmPassword: $confirmPassword) {
+        mutation signUp($data: SignUpInput!, $confirmPassword: String!) {
+          signUp(data: $data, confirmPassword: $confirmPassword) {
             user {
               id
               name
@@ -107,7 +107,7 @@ function useAuth() {
     `;
 
       const variables = {
-        input: { name, nickname, email, password, invitation },
+        data: { name, nickname, email, password, invitation },
         confirmPassword,
       };
 
