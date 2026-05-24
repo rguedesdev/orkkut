@@ -72,8 +72,8 @@ function CreateCommunity() {
 
   const handleCreateCommunity = async (data: TCreateCommunityFormData) => {
     const mutation = `
-      mutation CreateCommunity($input: CreateCommunityInput!) {
-        createCommunity(input: $input) {
+      mutation CreateCommunity($data: CreateCommunityInput!) {
+        createCommunity(data: $data) {
           id
           name
         }
@@ -85,7 +85,7 @@ function CreateCommunity() {
       const response = await api.post("/graphql", {
         query: mutation,
         variables: {
-          input: data, // O Zod já validou e deixou os campos idênticos ao Input do GraphQL
+          data: data, // O Zod já validou e deixou os campos idênticos ao Input do GraphQL
         },
       });
 

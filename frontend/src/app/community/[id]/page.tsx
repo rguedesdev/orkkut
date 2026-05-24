@@ -4,6 +4,8 @@
 import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
 
+import { ToastContainer, toast } from "react-toastify";
+
 import api from "@/utils/api";
 
 // Style Sheet CSS
@@ -56,6 +58,14 @@ function CommunityPage() {
                   privacy
                   country
                   language
+
+                  membersList {
+                    role
+                    user {
+                      id
+                      name
+                    }
+                  }
                 }
               }
             `,
@@ -102,14 +112,21 @@ function CommunityPage() {
 
   return (
     <div className={styles.page}>
+      <ToastContainer position="top-center" style={{ marginTop: "80px" }} />
       <main className={styles.communityContainer}>
-        <CommunityBasicInfoComponent community={community} owner={isOwner} />
+        <CommunityBasicInfoComponent
+          community={community}
+          owner={isOwner}
+          setCommunity={setCommunity}
+        />
         <div className={styles.communityCentralContainer}>
           <CommunityDetailsComponent community={community} />
           <ForumComponent />
         </div>
         <div className={styles.communityRightContainer}>
-          <CommunityMembersComponent />
+          <CommunityMembersComponent
+            communityMembers={community?.membersList}
+          />
           <RelatedCommunitiesComponent />
         </div>
       </main>

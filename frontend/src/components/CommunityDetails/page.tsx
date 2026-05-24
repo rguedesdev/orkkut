@@ -14,7 +14,6 @@ import { LiaGlobeAmericasSolid } from "react-icons/lia";
 import { FaShieldHalved } from "react-icons/fa6";
 import { RiVipCrownLine } from "react-icons/ri";
 import { FaRegEye } from "react-icons/fa";
-import { data } from "framer-motion/client";
 
 interface ICommunity {
   name: string;
@@ -73,7 +72,7 @@ function CommunityDetailsComponent({ community }: { community: ICommunity }) {
 
             <div className={styles.communityInfoLine}>
               <dt className={styles.communityInfoLineLabel}>
-                <RiGitRepositoryPrivateLine size={20} />{" "}
+                <RiGitRepositoryPrivateLine size={20} />
                 <span>Privacidade</span>
               </dt>
               <dd className={styles.communityInfoLineValue}>

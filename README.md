@@ -24,12 +24,19 @@ Este é um projeto de redesign e modernização da antiga rede social **Orkut**.
 - Autenticação com JWT
 - Cadastro e login de usuários (Backend/Frontend)
 - Integração com MongoDB para persistência de dados
+- Busca de comunidades e amigos
+- Criação de comunidades
+- Função entrar/sair da comunidade
 
 ### 🔜 Em desenvolvimento
 
 - Edição de Perfil
-- Criação de comunidades
-- Busca de comunidades e amigos
+- Criação de tópicos
+- Envio de Scraps
+- Galeria de fotos
+- Envio de depoimentos
+- Adicionar amigos
+- Atribuir elogios
 
 ## 💻 Tecnologias utilizadas
 

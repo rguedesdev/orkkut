@@ -2,11 +2,15 @@ const communityTypeDefs = /* GraphQL */ `
   ### ROOT TYPES ###
   extend type Mutation {
     createCommunity(data: CreateCommunityInput!): Community!
+
+    # ADICIONE ESTA LINHA:
+    joinCommunity(communityID: ID!): Community!
+
+    leaveCommunity(communityID: ID!): Community!
   }
 
   extend type Query {
     community(id: ID!): Community
-    # searchCommunities(search: String!): [Community!]!
   }
 
   ### INPUTS ###
@@ -32,6 +36,13 @@ const communityTypeDefs = /* GraphQL */ `
     moderators: [User]
     members: Int!
     createdAt: String!
+
+    membersList: [CommunityMember!]!
+  }
+
+  type CommunityMember {
+    role: String!
+    user: User!
   }
 `;
 

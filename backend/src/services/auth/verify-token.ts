@@ -2,7 +2,6 @@
 import { type FastifyRequest, type FastifyReply } from "fastify";
 import jwt from "jsonwebtoken";
 
-// Middlewares
 import { getToken } from "./get-token.js";
 
 const checkToken = (request: FastifyRequest, reply: FastifyReply) => {

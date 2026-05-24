@@ -8,16 +8,22 @@ import { communityResolvers } from "./modules/community/resolver.js";
 import { invitationTypeDefs } from "./modules/invitation/schema.js";
 import { invitationResolvers } from "./modules/invitation/resolver.js";
 
-import { searchTypeDefs } from "./modules/search/resolver.js";
+import { searchTypeDefs } from "./modules/search/schema.js";
 import { searchResolvers } from "./modules/search/resolver.js";
 
 // Combina schemas
-const schema = `
-  ${userTypeDefs}
-  ${communityTypeDefs}
-  ${searchTypeDefs}
-  ${invitationTypeDefs}
-`;
+// const schema = `
+//   ${userTypeDefs}
+//   ${communityTypeDefs}
+//   ${searchTypeDefs}
+//   ${invitationTypeDefs}
+// `;
+const schema = [
+  userTypeDefs,
+  communityTypeDefs,
+  searchTypeDefs,
+  invitationTypeDefs,
+];
 
 // Combina resolvers
 const resolvers = {
@@ -31,6 +37,11 @@ const resolvers = {
     ...communityResolvers.Mutation,
     ...invitationResolvers.Mutation,
   },
+
+  // CORRIGIDO: Injeta o Field Resolver de Community (e qualquer outro tipo customizado)
+  ...(communityResolvers.Community && {
+    Community: communityResolvers.Community,
+  }),
 };
 
 export { schema, resolvers };

@@ -11,57 +11,58 @@ import { FiMoreHorizontal } from "react-icons/fi";
 // Images
 import Kon from "../../../public/kon.jpg";
 
-function CommunityMembersComponent() {
-  const members = [
-    { id: "6948ebd12954226d52b52b20", name: "Kon Sama", img: Kon },
-    { id: "6948ebd12954226d52b52b20", name: "Rika Get Set", img: Kon },
-    { id: "6948ebd12954226d52b52b20", name: "Muh", img: Kon },
-    { id: "6948ebd12954226d52b52b20", name: "Saga", img: Kon },
-    { id: "6948ebd12954226d52b52b20", name: "Julee", img: Kon },
-    { id: "6948ebd12954226d52b52b20", name: "Gabi Orihime", img: Kon },
-    { id: "6948ebd12954226d52b52b20", name: "Miaka", img: Kon },
-    { id: "6948ebd12954226d52b52b20", name: "Ree", img: Kon },
-    { id: "6948ebd12954226d52b52b20", name: "Nika", img: Kon },
-  ];
+function CommunityMembersComponent({ communityMembers }) {
+  // Se o backend ainda estiver carregando ou vier vazio, garante que não quebre
+  const membersList = communityMembers || [];
+
+  // O Orkut original mostrava no máximo 9 membros naquele quadradinho da lateral.
+  // Vamos pegar apenas os 9 primeiros da lista para não quebrar o seu layout!
+  const previewMembers = membersList.slice(0, 9);
 
   return (
-    <section aria-labelledby={styles.communityMembersTitle}>
+    <section aria-labelledby="friends-title">
       <div className={styles.communityMembersContainer}>
         <h2 id="friends-title" className={styles.communityMembersTitle}>
-          Membros {/* ({members.length}) */}
+          Membros ({membersList.length})
         </h2>
 
         <ul className={styles.members}>
-          {members.map((member) => (
-            <li key={member.id} className={styles.memberContainer}>
-              <Link
-                className={styles.linkMemberProfile}
-                href={`/user/${member.id}`}
-              >
-                <figure className={styles.memberInfo}>
-                  <Image
-                    className={styles.memberPicture}
-                    src={member.img}
-                    alt={`Foto de perfil de ${member.name}`}
-                    width={80}
-                    height={80}
-                    priority
-                  />
-                  <figcaption className={styles.memberNameNickname}>
-                    {member.name}
-                  </figcaption>
-                </figure>
-              </Link>
-            </li>
-          ))}
+          {previewMembers.map((item) => {
+            // Desestruturando o 'user' e o 'role' de dentro do padrão do seu GraphQL
+            const { user, role } = item;
+
+            return (
+              <li key={user.id} className={styles.memberContainer}>
+                <Link
+                  className={styles.linkMemberProfile}
+                  href={`/user/${user.id}`}
+                >
+                  <figure className={styles.memberInfo}>
+                    <Image
+                      className={styles.memberPicture}
+                      // Se futuramente você tiver user.avatar, usa ele, senão vai o default
+                      src={user.avatar || Kon}
+                      alt={`Foto de perfil de ${user.name}`}
+                      width={80}
+                      height={80}
+                      priority
+                    />
+                    <figcaption className={styles.memberNameNickname}>
+                      {user.name}
+                    </figcaption>
+                  </figure>
+                </Link>
+              </li>
+            );
+          })}
         </ul>
 
         <hr className={styles.memberHrFaded} />
 
         <Link
           className={styles.seeAllMembers}
-          href="/"
-          aria-label="Ver todos os amigos"
+          href="/" // Futuramente você pode mudar para `/community/${communityId}/members`
+          aria-label="Ver todos os membros"
         >
           <span>Ver todos</span> <FiMoreHorizontal size={20} />
         </Link>
