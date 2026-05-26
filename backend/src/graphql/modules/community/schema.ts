@@ -1,5 +1,9 @@
 const communityTypeDefs = /* GraphQL */ `
   ### ROOT TYPES ###
+  extend type Query {
+    community(id: ID!): Community
+  }
+
   extend type Mutation {
     createCommunity(data: CreateCommunityInput!): Community!
 
@@ -7,10 +11,6 @@ const communityTypeDefs = /* GraphQL */ `
     joinCommunity(communityID: ID!): Community!
 
     leaveCommunity(communityID: ID!): Community!
-  }
-
-  extend type Query {
-    community(id: ID!): Community
   }
 
   ### INPUTS ###

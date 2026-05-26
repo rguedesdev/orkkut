@@ -29,8 +29,6 @@ function CommunityBasicInfoComponent({ community, owner, setCommunity }) {
   console.log("Dados da comunidade", community);
   console.log("É o Proprietário?", owner);
 
-  const router = useRouter();
-
   // === NOVO: DESCOBRE SE O USUÁRIO LOGADO JÁ É MEMBRO ===
   const loggedUserId =
     typeof window !== "undefined" ? localStorage.getItem("userID") : null;

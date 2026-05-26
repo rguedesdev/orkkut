@@ -1,6 +1,10 @@
 // Imports Principais
+import { useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
+
+// Axios
+import api from "@/utils/api";
 
 // Style Sheet CSS
 import styles from "./forum.module.css";

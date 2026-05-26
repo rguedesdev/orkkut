@@ -5,8 +5,7 @@
 .communityContainer {
   max-width: 1700px;
   height: auto;
-  margin-left: auto;
-  margin-right: auto;
+  margin-inline: auto;
   margin-top: 40px;
 
   display: flex;

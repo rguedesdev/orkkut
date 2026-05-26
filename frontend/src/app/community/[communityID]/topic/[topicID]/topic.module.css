@@ -1,0 +1,10 @@
+.page {
+  max-height: 100vh;
+}
+
+.topicContainer {
+  max-width: 1700px;
+  height: auto;
+  margin-inline: auto;
+  margin-top: 40px;
+}
