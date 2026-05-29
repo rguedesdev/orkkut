@@ -1,3 +1,6 @@
+// Imports
+import slugify from "slugify";
+
 // Models
 import { CommunityModel } from "./model.js";
 import { CommunityMemberModel } from "../community_members/model.js";
@@ -9,8 +12,15 @@ class CommunityService {
   static async createCommunity(data: any) {
     CommunityValidation.createCommunity(data);
 
+    const slug = slugify(data.name, {
+      lower: true,
+      strict: true,
+      trim: true,
+    });
+
     const newCommunity = await CommunityModel.create({
       name: data.name,
+      slug,
       description: data.description,
       category: data.category,
       privacy: data.privacy,
@@ -30,15 +40,14 @@ class CommunityService {
     return newCommunity;
   }
 
-  static async getCommunityById(id: string) {
-    const community = await CommunityModel.findById(id).lean();
+  static async getCommunityBySlug(slug: string) {
+    const community = await CommunityModel.findOne({ slug }).lean();
 
     if (!community) return null;
 
-    // O GraphQL vai ler as propriedades deste objeto:
     return {
-      ...community, // Espalha name, description, category...
-      id: community._id.toString(), // Cria o campo 'id' que o Schema exige usando o valor do '_id'
+      ...community,
+      id: community._id.toString(),
     };
   }
 

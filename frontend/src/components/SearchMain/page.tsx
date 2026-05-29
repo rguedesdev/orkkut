@@ -52,6 +52,7 @@ function SearchMain() {
               communities {
                 id
                 name
+                slug
                 category
                 members
               }         
@@ -112,7 +113,7 @@ function SearchMain() {
               <div
                 key={community.id}
                 className={styles.searchResult}
-                onClick={() => router.push(`/community/${community.id}`)}
+                onClick={() => router.push(`/community/${community.slug}`)}
               >
                 <Image
                   className={styles.searchImage}

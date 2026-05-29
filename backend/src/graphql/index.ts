@@ -44,10 +44,14 @@ const resolvers = {
     ...topicResolvers.Mutation,
   },
 
-  // CORRIGIDO: Injeta o Field Resolver de Community (e qualquer outro tipo customizado)
-  ...(communityResolvers.Community && {
-    Community: communityResolvers.Community,
-  }),
+  // Field Resolvers (Customizados)
+  Community: {
+    ...communityResolvers.Community,
+  },
+
+  Topic: {
+    ...topicResolvers.Topic,
+  },
 };
 
 export { schema, resolvers };

@@ -5,12 +5,12 @@ import { CommunityMemberModel } from "../community_members/model.js";
 
 const communityResolvers = {
   Query: {
-    community: (_: any, { id }: any, context: any) => {
+    community: (_: any, { slug }: any, context: any) => {
       if (!context.user) {
         throw new Error("Usuário não autenticado");
       }
 
-      return CommunityService.getCommunityById(id);
+      return CommunityService.getCommunityBySlug(slug);
     },
   },
 
@@ -44,7 +44,7 @@ const communityResolvers = {
     },
   },
 
-  // === ADICIONE ESTE BLOCO AQUI ===
+  // === FIELD REOLVER ===
   Community: {
     // Resolve o problema do ID mapeado incorretamente entre o MongoDB (_id) e o GraphQL (id)
     id: (parent: any) => parent._id?.toString() || parent.id,

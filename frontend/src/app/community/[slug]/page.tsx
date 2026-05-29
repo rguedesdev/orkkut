@@ -24,12 +24,10 @@ function CommunityPage() {
   const [community, setCommunity] = useState(null);
   const [isOwner, setIsOwner] = useState(false);
 
-  console.log("COMUNIDADE", community);
-
-  const { id } = useParams();
+  const { slug } = useParams();
 
   useEffect(() => {
-    if (!id) return;
+    if (!slug) return;
 
     const fetchCommunity = async () => {
       try {
@@ -46,8 +44,8 @@ function CommunityPage() {
           "/graphql",
           {
             query: `
-              query Community($id: ID!) {
-                community(id: $id) {
+              query Community($slug: String!) {
+                community(slug: $slug) {
                   ownerID
                   id
                   name
@@ -69,7 +67,7 @@ function CommunityPage() {
                 }
               }
             `,
-            variables: { id },
+            variables: { slug },
           },
           {
             // O TOKEN PRECISA ESTAR AQUI!
@@ -104,7 +102,7 @@ function CommunityPage() {
     };
 
     fetchCommunity();
-  }, [id]);
+  }, [slug]);
 
   if (isLoading) {
     return <Loading />;

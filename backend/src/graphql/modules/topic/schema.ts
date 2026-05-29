@@ -25,6 +25,8 @@ const topicTypeDefs = /* GraphQL */ `
     locked: Boolean!
 
     createdAt: String!
+
+    community: Community!
   }
 
   ### AUX TYPES ###

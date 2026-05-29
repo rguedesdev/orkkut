@@ -3,6 +3,7 @@ import { Schema, Types } from "mongoose";
 
 export interface ICommunity {
   name: string;
+  slug: string;
   description: string;
   category: string;
   privacy: string;
@@ -18,6 +19,12 @@ const communitySchema = new Schema<ICommunity>(
     name: {
       type: String,
       required: true,
+    },
+    slug: {
+      type: String,
+      required: true,
+      unique: true,
+      index: true,
     },
     description: {
       type: String,

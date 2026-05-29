@@ -1,7 +1,7 @@
 const communityTypeDefs = /* GraphQL */ `
   ### ROOT TYPES ###
   extend type Query {
-    community(id: ID!): Community
+    community(slug: String!): Community
   }
 
   extend type Mutation {
@@ -27,6 +27,7 @@ const communityTypeDefs = /* GraphQL */ `
   type Community {
     id: ID!
     name: String!
+    slug: String!
     description: String!
     category: String!
     privacy: String!

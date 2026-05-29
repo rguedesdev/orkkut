@@ -41,6 +41,8 @@ function CommunityDetailsComponent({ community }: { community: ICommunity }) {
     });
   };
 
+  console.log("DETALHES DA COMUNIDADE", community);
+
   return (
     <section>
       <div className={styles.communityDetailsContainer}>
