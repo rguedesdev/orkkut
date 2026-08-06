@@ -73,7 +73,7 @@
   height: 80px;
 }
 
-.memberNameNickname {
+.memberNameUsername {
   color: var(--text-primary);
   text-align: center; /* centraliza o nome dentro do bloco */
   font-size: 15px;

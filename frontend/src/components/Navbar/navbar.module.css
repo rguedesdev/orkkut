@@ -134,7 +134,7 @@
   object-fit: cover;
 }
 
-.navNameNickname {
+.navNameUsername {
   color: var(--text-primary);
   font-size: 1.1rem;
   font-weight: 500;
@@ -142,6 +142,17 @@
 
 .downArrow {
   color: #ed2590;
+  cursor: pointer;
+}
+
+.dropDownTrigger {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  color: inherit;
+  background: transparent;
+  border: 0;
   cursor: pointer;
 }
 

@@ -4,28 +4,46 @@
   "description": "",
   "main": "server.ts",
   "scripts": {
-    "dev": "node --watch --env-file=.env --import tsx ./src/server.ts"
+    "dev": "node --watch --env-file=.env --import tsx ./src/server.ts",
+    "migrate:usernames": "node --env-file=.env --import tsx ./src/scripts/migrate.ts",
+    "migrate:topics": "node --env-file=.env --import tsx ./src/scripts/migrate-topics.ts",
+    "migrate:media": "node --env-file=.env --import tsx ./src/scripts/migrate-media.ts",
+    "migrate:onboarding": "node --env-file=.env --import tsx ./src/scripts/migrate-onboarding.ts",
+    "migrate:social": "node --env-file=.env --import tsx ./src/scripts/migrate-social.ts",
+    "migrate:scraps": "node --env-file=.env --import tsx ./src/scripts/migrate-scraps.ts",
+    "media:cleanup": "node --env-file=.env --import tsx ./src/scripts/cleanup-media.ts",
+    "typecheck": "tsc --noEmit",
+    "test:media:integration": "node --env-file=.env --import tsx ./src/scripts/verify-media-integration.ts",
+    "test:onboarding:integration": "node --env-file=.env --import tsx ./src/scripts/verify-onboarding-integration.ts",
+    "test:social:integration": "node --env-file=.env --import tsx ./src/scripts/verify-social-integration.ts",
+    "test:scraps:integration": "node --env-file=.env --import tsx ./src/scripts/verify-scraps-integration.ts",
+    "test": "node --import tsx --test src/graphql/modules/topic/permissions.test.ts src/graphql/modules/topic/reply-thread.test.ts src/graphql/modules/media/media.test.ts src/graphql/modules/user/onboarding.test.ts src/graphql/modules/relationship/rules.test.ts src/graphql/modules/scrap/scrap.test.ts"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "type": "module",
   "dependencies": {
+    "@aws-sdk/client-s3": "^3.1104.0",
     "@fastify/cors": "^11.1.0",
+    "@fastify/multipart": "^10.1.0",
     "bcrypt": "^6.0.0",
     "fastify": "^5.6.1",
     "graphql": "^16.11.0",
+    "i18n-iso-countries": "^7.14.0",
     "jsonwebtoken": "^9.0.2",
     "mercurius": "^16.5.0",
-    "moongose": "^1.0.0",
+    "mongoose": "^8.19.1",
+    "sharp": "^0.35.3",
     "slugify": "^1.6.9",
     "zod": "^4.3.6"
   },
   "devDependencies": {
     "@types/bcrypt": "^6.0.0",
     "@types/cors": "^2.8.19",
-    "@types/mongoose": "^5.11.96",
+    "@types/jsonwebtoken": "^9.0.10",
     "@types/node": "^24.7.2",
-    "tsx": "^4.22.3"
+    "tsx": "^4.22.3",
+    "typescript": "^7.0.2"
   }
 }

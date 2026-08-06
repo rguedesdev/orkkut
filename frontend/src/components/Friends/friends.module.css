@@ -38,6 +38,21 @@
   gap: 5px; /* espaço entre imagem e nome */
 }
 
+.friendLink {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 130px;
+  padding: 10px 20px;
+  border-radius: 8px;
+  text-decoration: none;
+  transition: background-color 0.2s ease;
+}
+
+.friendLink:hover {
+  background-color: var(--bg-rgba-card);
+}
+
 .friendInfo {
   display: flex;
   flex-direction: column;
@@ -53,7 +68,8 @@
   display: block;
 }
 
-.friendNameNickname {
+.friendNameUsername {
+  color: var(--text-primary);
   text-align: center; /* centraliza o nome dentro do bloco */
   margin: 0;
   font-size: 0.95rem;
@@ -90,4 +106,25 @@
 .seeAllFriends:hover {
   color: #0377b9;
   cursor: pointer;
+}
+
+.requestActions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 6px;
+}
+
+.requestActions button {
+  padding: 6px 10px;
+  border: 1px solid #0377b9;
+  border-radius: 5px;
+  color: inherit;
+  background: transparent;
+  cursor: pointer;
+}
+
+.requestActions button:disabled {
+  cursor: wait;
+  opacity: 0.65;
 }

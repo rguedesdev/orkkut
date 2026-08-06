@@ -1,0 +1,20 @@
+.page {
+  max-height: 100vh;
+}
+
+.topicContainer {
+  max-width: 1700px;
+  height: auto;
+  margin-inline: auto;
+  margin-top: 40px;
+
+  display: flex;
+  flex-direction: row;
+  gap: 40px;
+}
+
+.error {
+  margin: 40px auto;
+  color: #c62828;
+  text-align: center;
+}

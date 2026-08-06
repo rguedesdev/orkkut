@@ -1,0 +1,6 @@
+.field { display: grid; gap: 10px; min-width: 0; padding: 14px; border: 1px solid #ccd4e2; border-radius: 8px; }
+.field input[type="search"] { padding: 9px; border: 1px solid #ccd4e2; border-radius: 5px; }
+.options { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 7px; max-height: 220px; overflow: auto; }
+.options label { display: flex; align-items: center; gap: 7px; padding: 8px; border-radius: 5px; cursor: pointer; }
+.selected { background: #dceeff; color: #025d92; }
+.error { color: #b42318; margin: 0; }

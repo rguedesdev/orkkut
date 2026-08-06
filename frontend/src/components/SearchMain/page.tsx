@@ -23,8 +23,14 @@ function SearchMain() {
   const router = useRouter();
   const [search, setSearch] = useState("");
   const [results, setResult] = useState({
-    users: [] as any[],
-    communities: [] as any[],
+    users: [] as Array<{ id: string; name: string; username: string }>,
+    communities: [] as Array<{
+      id: string;
+      name: string;
+      slug: string;
+      category: string;
+      members: number;
+    }>,
   });
   const [isLoading, setIsLoading] = useState(false);
   const [hasSearched, setHasSearched] = useState(false);
@@ -47,7 +53,7 @@ function SearchMain() {
               users {
                 id
                 name
-                nickname
+                username
               }
               communities {
                 id
@@ -144,7 +150,9 @@ function SearchMain() {
               <div
                 key={`${user.id}`}
                 className={styles.searchResult}
-                onClick={() => router.push(`/user/${user.id}`)}
+                onClick={() =>
+                  router.push(`/user/${encodeURIComponent(user.username)}`)
+                }
               >
                 <Image
                   className={styles.searchImage}
@@ -156,7 +164,7 @@ function SearchMain() {
                 <div className={styles.searchResultTexts}>
                   <h3 className={styles.searchResultTitle}>{user.name}</h3>
                   <div className={styles.searchResultInfo}>
-                    <h4>{`@${user.nickname}`}</h4>
+                    <h4>{`@${user.username}`}</h4>
                   </div>
                 </div>
               </div>

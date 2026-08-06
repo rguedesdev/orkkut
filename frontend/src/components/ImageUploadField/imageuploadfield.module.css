@@ -1,0 +1,65 @@
+.field {
+  display: grid;
+  gap: 10px;
+  min-width: 0;
+  margin: 16px 0;
+  padding: 14px;
+  border: 1px solid var(--border-color, #d3d9e6);
+  border-radius: 8px;
+}
+
+.field legend {
+  padding: 0 6px;
+  font-weight: 700;
+}
+
+.preview,
+.placeholder {
+  position: relative;
+  width: 100%;
+  min-height: 150px;
+  overflow: hidden;
+  border-radius: 6px;
+  background: #eef1f7;
+}
+
+.preview img {
+  object-fit: cover;
+}
+
+.placeholder {
+  display: grid;
+  place-items: center;
+  color: #667085;
+}
+
+.progressBlock {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: center;
+  gap: 10px;
+}
+
+.progressBlock progress {
+  width: 100%;
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.actions button {
+  padding: 8px 12px;
+  cursor: pointer;
+}
+
+.error {
+  margin: 0;
+  color: #b42318;
+}
+
+.fileInput {
+  display: none;
+}

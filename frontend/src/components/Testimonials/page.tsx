@@ -58,7 +58,7 @@ function TestimonialsComponent() {
                   priority
                 />
                 <div className={styles.testimonialContainer}>
-                  <h3 className={styles.testimonialNameNickname}>
+                  <h3 className={styles.testimonialNameUsername}>
                     {testimonial.name}:
                   </h3>
                   <p className={styles.testimonialText}>{testimonial.text}</p>

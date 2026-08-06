@@ -8,29 +8,69 @@ import { useRouter } from "next/navigation";
 import api from "@/utils/api";
 
 // Tipagens
-type TUser = { id: string; name: string; email: string };
+import type {
+  RegistrationAccountData,
+  RegistrationProfileData,
+} from "@/validation/onboarding";
+
+type TUser = {
+  id: string;
+  name: string;
+  username: string;
+  email?: string | null;
+  profile?: { avatarImage?: { url: string } | null } | null;
+};
 type TAuthPayload = { user: TUser; token: string };
 
 function useAuth() {
   const [userAuthenticated, setUserAuthenticated] = useState(false);
+  const [authenticatedUser, setAuthenticatedUser] = useState<TUser | null>(null);
   const router = useRouter();
 
   useEffect(() => {
     const token = localStorage.getItem("token");
     if (token) {
-      try {
-        api.defaults.headers.Authorization = `Bearer ${token}`;
-        setUserAuthenticated(true);
-      } catch (error) {
-        console.error("Erro ao configurar token:", error);
-        localStorage.removeItem("token");
-      }
+      api.defaults.headers.Authorization = `Bearer ${token}`;
+
+      const restoreSession = async () => {
+        try {
+          const response = await api.post("/graphql", {
+            query: `query RestoreSession {
+              me {
+                id
+                name
+                username
+                email
+                profile { avatarImage { url } }
+              }
+            }`,
+          });
+          if (response.data.errors?.length || !response.data.data?.me) {
+            throw new Error(response.data.errors?.[0]?.message ?? "Sessão inválida.");
+          }
+          setAuthenticatedUser(response.data.data.me);
+          setUserAuthenticated(true);
+        } catch (error) {
+          console.error("Erro ao restaurar sessão:", error);
+          setAuthenticatedUser(null);
+          setUserAuthenticated(false);
+          localStorage.removeItem("token");
+          localStorage.removeItem("userID");
+          delete api.defaults.headers.Authorization;
+        }
+      };
+
+      void restoreSession();
+    } else {
+      setAuthenticatedUser(null);
+      setUserAuthenticated(false);
+      delete api.defaults.headers.Authorization;
     }
   }, []);
 
   // Função de login
   async function signIn(
-    email: string,
+    login: string,
     password: string,
   ): Promise<TAuthPayload> {
     const mutation = `
@@ -39,14 +79,16 @@ function useAuth() {
         user {
           id
           name
+          username
           email
+          profile { avatarImage { url } }
         }
         token
       }
     }
   `;
 
-    const variables = { data: { email, password } };
+    const variables = { data: { login, password } };
 
     try {
       const response = await api.post("/graphql", {
@@ -83,32 +125,43 @@ function useAuth() {
     }
   }
 
-  async function signUp(
-    name: string,
-    username: string,
-    email: string,
-    password: string,
-    confirmPassword: string,
-    invitation: string,
+  async function completeRegistration(
+    account: RegistrationAccountData,
+    profile: Partial<RegistrationProfileData>,
+    onboardingToken: string,
   ) {
     try {
       const mutation = `
-        mutation signUp($data: SignUpInput!, $confirmPassword: String!) {
-          signUp(data: $data, confirmPassword: $confirmPassword) {
+        mutation CompleteRegistration(
+          $account: RegistrationAccountInput!
+          $profile: ProfileInput
+          $onboardingToken: String!
+        ) {
+          completeRegistration(
+            account: $account
+            profile: $profile
+            onboardingToken: $onboardingToken
+          ) {
             user {
               id
               name
               username
               email
+              profile { avatarImage { url } }
             }
             token
           }
         }
     `;
 
+      const { avatarImage, ...profileFields } = profile;
       const variables = {
-        data: { name, username, email, password, invitation },
-        confirmPassword,
+        account,
+        profile: {
+          ...profileFields,
+          avatarImageID: avatarImage?.id ?? null,
+        },
+        onboardingToken,
       };
 
       const response = await api.post("/graphql", {
@@ -122,7 +175,7 @@ function useAuth() {
         throw new Error(errors[0].message);
       }
 
-      const authPayload: TAuthPayload = data.signUp;
+      const authPayload: TAuthPayload = data.completeRegistration;
 
       if (!authPayload?.token || !authPayload?.user) {
         throw new Error("Resposta inválida do servidor");
@@ -137,14 +190,17 @@ function useAuth() {
 
   async function logout() {
     localStorage.removeItem("token");
-    localStorage.removeItem("userId");
+    localStorage.removeItem("userID");
     localStorage.setItem("theme", "light");
+    delete api.defaults.headers.Authorization;
+    setAuthenticatedUser(null);
     setUserAuthenticated(false);
-    router.push("/");
+    router.replace("/");
   }
 
   // Configura autenticação local e Axios
   async function authUser(data: TAuthPayload) {
+    setAuthenticatedUser(data.user);
     setUserAuthenticated(true);
 
     // Salva token localStorage
@@ -159,13 +215,14 @@ function useAuth() {
     localStorage.setItem("userID", userID);
 
     // Redireciona para a página do usuário
-    router.push(`/profile/${userID}`);
+    router.replace(`/profile/${encodeURIComponent(data.user.username)}`);
   }
 
   return {
     userAuthenticated,
+    authenticatedUser,
     signIn,
-    signUp,
+    completeRegistration,
     logout,
   };
 }

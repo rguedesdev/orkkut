@@ -10,8 +10,13 @@ import { FiMoreHorizontal } from "react-icons/fi";
 
 // Images
 import Kon from "../../../public/kon.jpg";
+import type { CommunityMember } from "@/types/community";
 
-function CommunityMembersComponent({ communityMembers }) {
+function CommunityMembersComponent({
+  communityMembers,
+}: {
+  communityMembers?: CommunityMember[];
+}) {
   // Se o backend ainda estiver carregando ou vier vazio, garante que não quebre
   const membersList = communityMembers || [];
 
@@ -27,15 +32,15 @@ function CommunityMembersComponent({ communityMembers }) {
         </h2>
 
         <ul className={styles.members}>
-          {previewMembers.map((item) => {
+          {previewMembers.map((item: CommunityMember) => {
             // Desestruturando o 'user' e o 'role' de dentro do padrão do seu GraphQL
-            const { user, role } = item;
+            const { user } = item;
 
             return (
               <li key={user.id} className={styles.memberContainer}>
                 <Link
                   className={styles.linkMemberProfile}
-                  href={`/user/${user.id}`}
+                  href={`/user/${encodeURIComponent(user.username)}`}
                 >
                   <figure className={styles.memberInfo}>
                     <Image
@@ -47,7 +52,7 @@ function CommunityMembersComponent({ communityMembers }) {
                       height={80}
                       priority
                     />
-                    <figcaption className={styles.memberNameNickname}>
+                    <figcaption className={styles.memberNameUsername}>
                       {user.name}
                     </figcaption>
                   </figure>

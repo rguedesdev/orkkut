@@ -7,7 +7,7 @@ import { UserContext } from "@/context/UserContext";
 import { useForm, SubmitHandler } from "react-hook-form";
 import * as z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { ToastContainer, toast } from "react-toastify";
+import { toast } from "react-toastify";
 
 // Style Sheet CSS
 import styles from "./login.module.css";
@@ -17,7 +17,7 @@ import { InputComponent } from "../Input/page";
 
 // Schema Zod para SignIn
 const CreateSignInSchema = z.object({
-  email: z.email("O email é obrigatório!").trim(),
+  login: z.string().trim().min(1, "Informe seu username ou e-mail."),
   password: z
     .string()
     .nonempty("A senha é obrigatória!")
@@ -28,9 +28,6 @@ type TCreateSignInFormData = z.infer<typeof CreateSignInSchema>;
 
 function LoginComponent() {
   const Context = useContext(UserContext);
-  if (!Context) return null;
-  const { signIn } = Context;
-
   const [spinner, setSpinner] = useState(false);
 
   const {
@@ -40,6 +37,8 @@ function LoginComponent() {
   } = useForm<TCreateSignInFormData>({
     resolver: zodResolver(CreateSignInSchema),
   });
+  if (!Context) return null;
+  const { signIn } = Context;
 
   const handleSignIn: SubmitHandler<TCreateSignInFormData> = async (data) => {
     setSpinner(true);
@@ -50,10 +49,10 @@ function LoginComponent() {
         return;
       }
 
-      await signIn(data.email, data.password);
-    } catch (err: any) {
+      await signIn(data.login, data.password);
+    } catch (err: unknown) {
       console.error("Erro ao logar:", err);
-      toast.error(err.message, {
+      toast.error(err instanceof Error ? err.message : "Não foi possível entrar.", {
         icon: <span className="text-red-500 text-2xl mb-1">&#10539;</span>,
         position: "top-center",
       });
@@ -71,12 +70,12 @@ function LoginComponent() {
 
         <form onSubmit={handleSubmit(handleSignIn)} autoComplete="off">
           <InputComponent
-            inputLabel="Email"
-            inputType="email"
-            inputID="email"
-            inputPlaceholder="Digite seu email"
-            register={register("email")}
-            error={errors.email?.message}
+            inputLabel="Username ou e-mail"
+            inputType="text"
+            inputID="login"
+            inputPlaceholder="Digite seu username ou e-mail"
+            register={register("login")}
+            error={errors.login?.message}
           />
 
           <InputComponent

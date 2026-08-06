@@ -43,6 +43,15 @@
   flex-direction: column;
   align-items: center; /* centraliza imagem + nome horizontalmente */
   gap: 5px; /* espaço entre imagem e nome */
+  width: 130px;
+  padding: 15px 20px;
+  border-radius: 8px;
+  transition: background-color 0.2s ease;
+}
+
+.communityInfo:hover {
+  background-color: var(--bg-rgba-card);
+  cursor: pointer;
 }
 
 .communityPicture {

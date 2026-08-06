@@ -1,9 +1,8 @@
 // Imports Principais
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
-import { ToastContainer, toast } from "react-toastify";
+import { toast } from "react-toastify";
 
 // Style Sheet CSS
 import styles from "./communitybasicinfo.module.css";
@@ -11,10 +10,8 @@ import styles from "./communitybasicinfo.module.css";
 // Components
 import { MdOutlinePeopleAlt, MdOutlineForum } from "react-icons/md";
 import { CgPoll } from "react-icons/cg";
-import { RiUserCommunityLine, RiVipCrownLine } from "react-icons/ri";
-import { AiOutlineStop } from "react-icons/ai";
+import { RiUserCommunityLine } from "react-icons/ri";
 import { GoCircleSlash } from "react-icons/go";
-import { IoCloseCircleOutline } from "react-icons/io5";
 import { RiCloseCircleLine } from "react-icons/ri";
 import { FaTheaterMasks } from "react-icons/fa";
 import { AiOutlineFileText } from "react-icons/ai";
@@ -24,8 +21,20 @@ import { BsGear } from "react-icons/bs";
 // Images
 import EuOdeio from "../../../public/eu_odeio2.png";
 import api from "@/utils/api";
+import type { Community, CommunityUpdate } from "@/types/community";
+import { CommunityEditForm } from "@/components/CommunityEditForm/page";
 
-function CommunityBasicInfoComponent({ community, owner, setCommunity }) {
+type CommunityBasicInfoProps = {
+  community: Community;
+  owner: boolean;
+  setCommunity: (update: CommunityUpdate) => void;
+};
+
+function CommunityBasicInfoComponent({
+  community,
+  owner,
+  setCommunity,
+}: CommunityBasicInfoProps) {
   console.log("Dados da comunidade", community);
   console.log("É o Proprietário?", owner);
 
@@ -46,6 +55,7 @@ function CommunityBasicInfoComponent({ community, owner, setCommunity }) {
     }) || false;
 
   const [isLoadingAction, setIsLoadingAction] = useState(false);
+  const [showSettings, setShowSettings] = useState(false);
 
   async function handleJoin() {
     if (isLoadingAction) return; // Se já tiver clicado, ignora o segundo clique
@@ -65,9 +75,10 @@ function CommunityBasicInfoComponent({ community, owner, setCommunity }) {
                     members
                     membersList {
                         role
-                        user {
-                            id
-                            name
+                      user {
+                        id
+                        name
+                        username
                         }
                     }
                 }
@@ -122,9 +133,10 @@ function CommunityBasicInfoComponent({ community, owner, setCommunity }) {
                   members        
                   membersList {  
                       role
-                      user {
-                          id
-                          name
+                    user {
+                      id
+                      name
+                      username
                       }
                   }
               }
@@ -166,11 +178,12 @@ function CommunityBasicInfoComponent({ community, owner, setCommunity }) {
         <div className={styles.pictureBorder}>
           <Image
             className={styles.communityPicture}
-            src={EuOdeio}
+            src={community.avatarImage?.url ?? EuOdeio}
             alt="Profile Image"
             width={200}
             height={200}
             priority
+            unoptimized={Boolean(community.avatarImage?.url)}
           />
         </div>
 
@@ -268,26 +281,39 @@ function CommunityBasicInfoComponent({ community, owner, setCommunity }) {
             </>
           )}
 
-          {/* Se FOR o proprietário, mostra ferramentas de gestão */}
-          {owner && (
+          {/* Ferramentas autorizadas também para moderadores e admins. */}
+          {community.canEdit && (
             <>
-              <Link className={styles.communityLinkAction} href={`/`}>
-                <span className={styles.iconWrapper}>
-                  <RiMegaphoneLine size={20} />
-                </span>
-                <span>Promover</span>
-              </Link>
+              {owner && (
+                <Link className={styles.communityLinkAction} href={`/`}>
+                  <span className={styles.iconWrapper}>
+                    <RiMegaphoneLine size={20} />
+                  </span>
+                  <span>Promover</span>
+                </Link>
+              )}
 
-              <Link className={styles.communityLinkAction} href={`/`}>
+              <button
+                type="button"
+                className={styles.communityLinkAction}
+                onClick={() => setShowSettings((visible) => !visible)}
+              >
                 <span className={styles.iconWrapper}>
                   <BsGear size={20} />
                 </span>
                 <span>Configurações</span>
-              </Link>
+              </button>
             </>
           )}
         </div>
       </div>
+      {showSettings && (
+        <CommunityEditForm
+          community={community}
+          onSaved={setCommunity}
+          onClose={() => setShowSettings(false)}
+        />
+      )}
     </section>
   );
 }

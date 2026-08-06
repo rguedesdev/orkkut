@@ -12,6 +12,8 @@ export interface ICommunity {
   ownerID: Types.ObjectId;
   moderators: Types.ObjectId[];
   members: number;
+  avatarImageID?: Types.ObjectId | null;
+  coverImageID?: Types.ObjectId | null;
 }
 
 const communitySchema = new Schema<ICommunity>(
@@ -61,6 +63,16 @@ const communitySchema = new Schema<ICommunity>(
     members: {
       type: Number,
       required: true,
+    },
+    avatarImageID: {
+      type: Schema.Types.ObjectId,
+      ref: "Media",
+      default: null,
+    },
+    coverImageID: {
+      type: Schema.Types.ObjectId,
+      ref: "Media",
+      default: null,
     },
   },
   { timestamps: true },

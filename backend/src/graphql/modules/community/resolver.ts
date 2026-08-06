@@ -2,6 +2,12 @@
 import CommunityService from "./service.js";
 
 import { CommunityMemberModel } from "../community_members/model.js";
+import MediaService from "../media/service.js";
+import {
+  canEditCommunity,
+  getCommunityManageContext,
+  requireAuthenticated,
+} from "../topic/authorization.js";
 
 const communityResolvers = {
   Query: {
@@ -16,15 +22,13 @@ const communityResolvers = {
 
   Mutation: {
     createCommunity: (_: any, { data }: any, context: any) => {
-      if (!context.user) {
-        throw new Error("Usuário não autenticado!");
-      }
-
       return CommunityService.createCommunity({
         ...data,
-        ownerID: context.user.id,
+        ownerID: requireAuthenticated(context),
       });
     },
+    updateCommunity: (_: any, { id, data }: any, context: any) =>
+      CommunityService.updateCommunity(id, data, requireAuthenticated(context)),
 
     joinCommunity: async (_: any, { communityID }: any, context: any) => {
       if (!context.user) {
@@ -48,6 +52,18 @@ const communityResolvers = {
   Community: {
     // Resolve o problema do ID mapeado incorretamente entre o MongoDB (_id) e o GraphQL (id)
     id: (parent: any) => parent._id?.toString() || parent.id,
+    avatarImage: (parent: any) =>
+      parent.avatarImageID ? MediaService.getReadyMedia(parent.avatarImageID) : null,
+    coverImage: (parent: any) =>
+      parent.coverImageID ? MediaService.getReadyMedia(parent.coverImageID) : null,
+    canEdit: async (parent: any, _: any, context: any) => {
+      if (!context.user?.id) return false;
+      const permission = await getCommunityManageContext(
+        parent._id ?? parent.id,
+        String(context.user.id),
+      );
+      return canEditCommunity({ actorID: String(context.user.id), ...permission });
+    },
 
     membersList: async (parent: any) => {
       // O 'parent' é o objeto da comunidade retornado pelo seu 'CommunityService.getCommunityById(id)'

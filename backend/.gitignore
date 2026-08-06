@@ -3,3 +3,7 @@
 
 # Variáveis de ambiente
 .env*
+!.env.example
+
+# Uploads do driver local (somente desenvolvimento)
+/.uploads

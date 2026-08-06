@@ -18,9 +18,11 @@ export interface ITopic {
   content: string;
 
   commentsCount: number;
+  likesCount: number;
 
   pinned: boolean;
   locked: boolean;
+  featuredImageID?: Types.ObjectId | null;
 }
 
 const topicSchema = new Schema<ITopic>(
@@ -53,6 +55,13 @@ const topicSchema = new Schema<ITopic>(
     commentsCount: {
       type: Number,
       default: 0,
+      min: 0,
+    },
+
+    likesCount: {
+      type: Number,
+      default: 0,
+      min: 0,
     },
 
     pinned: {
@@ -63,6 +72,11 @@ const topicSchema = new Schema<ITopic>(
     locked: {
       type: Boolean,
       default: false,
+    },
+    featuredImageID: {
+      type: Schema.Types.ObjectId,
+      ref: "Media",
+      default: null,
     },
   },
   { timestamps: true },

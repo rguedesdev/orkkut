@@ -1,8 +1,8 @@
 "use client";
 
 // Imports Principais
-import { useEffect, useState } from "react";
-import { useForm, SubmitHandler } from "react-hook-form";
+import { useState } from "react";
+import { useForm } from "react-hook-form";
 import { useRouter } from "next/navigation";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
@@ -16,6 +16,8 @@ import styles from "./createcommunity.module.css";
 // Componentes
 import { InputComponent } from "@/components/Input/page";
 import { SelectComponent } from "@/components/Select/page";
+import { ImageUploadField } from "@/components/ImageUploadField/page";
+import type { Media } from "@/types/media";
 
 // Schema de validação usando Zod
 const CreateCommunitySchema = z.object({
@@ -34,7 +36,11 @@ const CreateCommunitySchema = z.object({
 type TCreateCommunityFormData = z.infer<typeof CreateCommunitySchema>;
 
 function CreateCommunity() {
-  const [name, setName] = useState("");
+  const [avatarImage, setAvatarImage] = useState<Media | null>(null);
+  const [coverImage, setCoverImage] = useState<Media | null>(null);
+  const [avatarUploading, setAvatarUploading] = useState(false);
+  const [coverUploading, setCoverUploading] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const router = useRouter();
 
@@ -76,17 +82,25 @@ function CreateCommunity() {
         createCommunity(data: $data) {
           id
           name
+          slug
         }
       }
     `;
 
     try {
+      setIsSubmitting(true);
       // Usando a sua instância do Axios (api)
       const response = await api.post("/graphql", {
         query: mutation,
         variables: {
-          data: data, // O Zod já validou e deixou os campos idênticos ao Input do GraphQL
+          data: {
+            ...data,
+            avatarImageID: avatarImage?.id,
+            coverImageID: coverImage?.id,
+          },
         },
+      }, {
+        headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
       });
 
       const { data: gqlData, errors } = response.data;
@@ -98,10 +112,12 @@ function CreateCommunity() {
       console.log("Comunidade criada com sucesso!", gqlData.createCommunity);
 
       // Redireciona para a página da comunidade recém-criada
-      router.push(`/community/${gqlData.createCommunity.id}`);
-    } catch (err: any) {
+      router.push(`/community/${gqlData.createCommunity.slug}`);
+    } catch (err: unknown) {
       console.error("Erro ao criar comunidade:", err);
-      alert(err.message || "Erro ao conectar com o servidor");
+      alert(err instanceof Error ? err.message : "Erro ao conectar com o servidor");
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -167,8 +183,31 @@ function CreateCommunity() {
             />
           </div>
 
-          <button className={styles.btnCreate} type="submit">
-            Criar Comunidade
+          <ImageUploadField
+            label="Avatar da comunidade"
+            purpose="COMMUNITY_AVATAR"
+            value={avatarImage}
+            onChange={setAvatarImage}
+            onUploadingChange={setAvatarUploading}
+            hint="JPG, PNG ou WebP, até 5 MB. Recomendado: imagem quadrada."
+            disabled={isSubmitting}
+          />
+          <ImageUploadField
+            label="Capa da comunidade"
+            purpose="COMMUNITY_COVER"
+            value={coverImage}
+            onChange={setCoverImage}
+            onUploadingChange={setCoverUploading}
+            hint="JPG, PNG ou WebP, até 10 MB. Recomendado: formato panorâmico."
+            disabled={isSubmitting}
+          />
+
+          <button
+            className={styles.btnCreate}
+            type="submit"
+            disabled={avatarUploading || coverUploading || isSubmitting}
+          >
+            {isSubmitting ? "Criando…" : "Criar Comunidade"}
           </button>
         </form>
       </main>

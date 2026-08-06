@@ -9,7 +9,7 @@ type ObjectId = mongoose.Types.ObjectId;
 interface IUser {
   _id: string | ObjectId;
   name: string;
-  email: string;
+  email?: string | null;
 }
 
 const createUserToken = (user: IUser) => {
@@ -17,7 +17,7 @@ const createUserToken = (user: IUser) => {
     {
       id: user._id.toString(),
       name: user.name,
-      email: user.email,
+      email: user.email ?? null,
     },
     jwtSecret,
   );

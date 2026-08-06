@@ -1,0 +1,45 @@
+.page {
+  max-height: 100vh;
+}
+
+.communityContainer {
+  max-width: 1700px;
+  height: auto;
+  margin-inline: auto;
+  margin-top: 40px;
+
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.communityColumns {
+  display: flex;
+  flex-direction: row;
+  gap: 20px;
+}
+
+.communityCover {
+  position: relative;
+  width: 100%;
+  min-height: 220px;
+  overflow: hidden;
+  border-radius: 12px;
+  background: #e6eaf2;
+}
+
+.communityCover img {
+  object-fit: cover;
+}
+
+.communityCentralContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.communityRightContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}

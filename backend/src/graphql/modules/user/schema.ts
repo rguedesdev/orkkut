@@ -1,23 +1,31 @@
-// Schema é o TypeDefs do GraphQl, mas separado
 const userTypeDefs = /* GraphQL */ `
-  ### ROOT TYPES ###
   type Query {
     me: User
-    user(id: ID!): User
+    user(username: String!): User
+    usernameAvailable(username: String!): Boolean!
+    emailAvailable(email: String!): Boolean!
+    invitationStatus(code: String!): InvitationStatus!
   }
 
   type Mutation {
-    signUp(data: SignUpInput!, confirmPassword: String!): AuthPayload!
+    validateRegistrationStep(data: RegistrationAccountInput!): RegistrationValidation!
+    completeRegistration(
+      account: RegistrationAccountInput!
+      profile: ProfileInput
+      onboardingToken: String!
+    ): AuthPayload!
     signIn(data: SignInInput!): AuthPayload!
   }
 
-  ### MAIN TYPES ###
   type User {
     id: ID!
     name: String!
     username: String!
-    email: String!
-    attributes: Attributes
+    email: String
+    attributes: Attributes @deprecated(reason: "Use socialInteractions; attributes contém apenas compatibilidade legada.")
+    profile: Profile
+    relationship: UserRelationship!
+    socialInteractions: ProfileSocialInteractions!
   }
 
   type AuthPayload {
@@ -25,7 +33,16 @@ const userTypeDefs = /* GraphQL */ `
     token: String!
   }
 
-  ### AUX TYPES ###
+  type RegistrationValidation {
+    onboardingToken: String!
+    expiresInSeconds: Int!
+  }
+
+  type InvitationStatus {
+    valid: Boolean!
+    message: String!
+  }
+
   type Attributes {
     fans: Int
     cool: Int
@@ -33,17 +50,17 @@ const userTypeDefs = /* GraphQL */ `
     reliable: Int
   }
 
-  ### INPUTS ###
-  input SignUpInput {
-    invitation: String!
+  input RegistrationAccountInput {
     name: String!
     username: String!
     email: String!
     password: String!
+    confirmPassword: String!
+    invitation: String!
   }
 
   input SignInInput {
-    email: String!
+    login: String!
     password: String!
   }
 `;

@@ -1,218 +1,167 @@
-// Imports Principais
+"use client";
+
 import { useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
-
-// Axios
-import api from "@/utils/api";
-
-// Style Sheet CSS
-import styles from "./forum.module.css";
-
-// Icons
-import { FiMoreHorizontal } from "react-icons/fi";
-
-import { MdOutlineTopic } from "react-icons/md";
-import { MdShortText } from "react-icons/md";
-
-import { BsChatLeftDots } from "react-icons/bs";
+import { FaRegPenToSquare } from "react-icons/fa6";
 import { IoChatboxEllipsesOutline } from "react-icons/io5";
 
-import { PiChatText } from "react-icons/pi";
-import { MdOutlineReplyAll } from "react-icons/md";
-
-import { FaRegPenToSquare } from "react-icons/fa6";
-
-// Images
+import api from "@/utils/api";
+import type { TopicSummary } from "@/types/topic";
 import Kon from "../../../public/kon.jpg";
+import styles from "./forum.module.css";
 
-function ForumComponent() {
+type ForumProps = {
+  communityID?: string;
+  communitySlug?: string;
+  canCreateTopic?: boolean;
+};
+
+type TopicPage = {
+  items: TopicSummary[];
+  page: number;
+  totalPages: number;
+  hasNextPage: boolean;
+};
+
+function ForumComponent({
+  communityID,
+  communitySlug,
+  canCreateTopic,
+}: ForumProps) {
+  const [topics, setTopics] = useState<TopicSummary[]>([]);
+  const [page, setPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (!communityID) return;
+
+    const fetchTopics = async () => {
+      setIsLoading(true);
+      setError(null);
+
+      try {
+        const token = localStorage.getItem("token");
+        const response = await api.post(
+          "/graphql",
+          {
+            query: `
+              query TopicsByCommunity($communityID: ID!, $page: Int!) {
+                topicsByCommunity(
+                  communityID: $communityID
+                  page: $page
+                  limit: 5
+                ) {
+                  items {
+                    id
+                    title
+                    commentsCount
+                    likesCount
+                    createdAt
+                    author {
+                      id
+                      name
+                      username
+                    }
+                  }
+                  page
+                  totalPages
+                  hasNextPage
+                }
+              }
+            `,
+            variables: { communityID, page },
+          },
+          {
+            headers: { Authorization: `Bearer ${token}` },
+          },
+        );
+
+        if (response.data.errors?.length) {
+          throw new Error(response.data.errors[0].message);
+        }
+
+        const result: TopicPage = response.data.data.topicsByCommunity;
+        setTopics(result.items);
+        setTotalPages(result.totalPages);
+      } catch (err) {
+        setError(err instanceof Error ? err.message : "Erro ao buscar tópicos.");
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchTopics();
+  }, [communityID, page]);
+
   return (
     <section>
       <div className={styles.forumContainer}>
         <div className={styles.topForumElements}>
           <h2 className={styles.forumTitle}>Fórum</h2>
-
-          <Link className={styles.createTopicBtn} href={`/create-topic`}>
-            <FaRegPenToSquare size={20} /> <span>Criar Tópico</span>
-          </Link>
+          {communitySlug && canCreateTopic && (
+            <Link
+              className={styles.createTopicBtn}
+              href={`/community/${encodeURIComponent(communitySlug)}/create-topic`}
+            >
+              <FaRegPenToSquare size={20} /> <span>Criar tópico</span>
+            </Link>
+          )}
         </div>
 
-        <div className={styles.topicContainer}>
-          <Image
-            className={styles.forumPicture}
-            src={Kon}
-            alt="Forum Picture"
-            width={0}
-            height={0}
-            priority
-          />
-          <div className={styles.topicTexts}>
-            <h3 className={styles.topicTitle}>
-              <MdShortText size={30} />
-              <span>Episódio 1 - 2ª Temporada (Contém Spoilers)</span>
-            </h3>
+        {isLoading && <p className={styles.status}>Carregando tópicos...</p>}
+        {error && <p className={styles.error}>{error}</p>}
+        {!isLoading && !error && topics.length === 0 && (
+          <p className={styles.status}>Esta comunidade ainda não possui tópicos.</p>
+        )}
 
-            <p className={styles.topicInfo}>
-              <IoChatboxEllipsesOutline size={22} />
-              <span>55 Respostas</span>
-            </p>
+        {topics.map((topic) => (
+          <article key={topic.id} className={styles.topicContainer}>
+            <Image
+              className={styles.forumPicture}
+              src={Kon}
+              alt={`Foto de ${topic.author.name}`}
+              width={60}
+              height={60}
+            />
+            <div className={styles.topicTexts}>
+              <Link
+                className={styles.topicTitle}
+                href={`/community/${encodeURIComponent(communitySlug ?? "")}/forum/${topic.id}`}
+              >
+                {topic.title}
+              </Link>
+              <p className={styles.topicAuthor}>
+                por @{topic.author.username}
+              </p>
+              <div className={styles.topicInfo}>
+                <span>
+                  <IoChatboxEllipsesOutline size={18} /> {topic.commentsCount}
+                </span>
+                <span>{topic.likesCount} curtidas</span>
+              </div>
+            </div>
+          </article>
+        ))}
+
+        {totalPages > 1 && (
+          <div className={styles.pagination}>
+            <button disabled={page === 1} onClick={() => setPage(page - 1)}>
+              Anterior
+            </button>
+            <span>
+              Página {page} de {totalPages}
+            </span>
+            <button
+              disabled={page === totalPages}
+              onClick={() => setPage(page + 1)}
+            >
+              Próxima
+            </button>
           </div>
-        </div>
-
-        <hr className={styles.forumHrFaded} />
-
-        <div className={styles.topicContainer}>
-          <Image
-            className={styles.forumPicture}
-            src={Kon}
-            alt="Forum Picture"
-            width={0}
-            height={0}
-            priority
-          />
-          <div className={styles.topicTexts}>
-            <h3 className={styles.topicTitle}>
-              <MdShortText size={30} />
-              <span>Capítulo 155: Túmulo dos Vagalumes</span>
-            </h3>
-
-            <p className={styles.topicInfo}>
-              <IoChatboxEllipsesOutline size={22} />
-              <span>95 Respostas</span>
-            </p>
-          </div>
-        </div>
-
-        <hr className={styles.forumHrFaded} />
-
-        <div className={styles.topicContainer}>
-          <Image
-            className={styles.forumPicture}
-            src={Kon}
-            alt="Forum Picture"
-            width={0}
-            height={0}
-            priority
-          />
-          <div className={styles.topicTexts}>
-            <h3 className={styles.topicTitle}>
-              <MdShortText size={30} />
-              <span>Capítulo 155: Túmulo dos Vagalumes</span>
-            </h3>
-
-            <p className={styles.topicInfo}>
-              <IoChatboxEllipsesOutline size={22} />
-              <span>20 Respostas</span>
-            </p>
-          </div>
-        </div>
-
-        <hr className={styles.forumHrFaded} />
-
-        <div className={styles.topicContainer}>
-          <Image
-            className={styles.forumPicture}
-            src={Kon}
-            alt="Forum Picture"
-            width={0}
-            height={0}
-            priority
-          />
-          <div className={styles.topicTexts}>
-            <h3 className={styles.topicTitle}>
-              <MdShortText size={30} />
-              <span>Capítulo 155: Túmulo dos Vagalumes</span>
-            </h3>
-
-            <p className={styles.topicInfo}>
-              <IoChatboxEllipsesOutline size={22} />
-              <span>20 Respostas</span>
-            </p>
-          </div>
-        </div>
-
-        <hr className={styles.forumHrFaded} />
-
-        <div className={styles.topicContainer}>
-          <Image
-            className={styles.forumPicture}
-            src={Kon}
-            alt="Forum Picture"
-            width={0}
-            height={0}
-            priority
-          />
-          <div className={styles.topicTexts}>
-            <h3 className={styles.topicTitle}>
-              <MdShortText size={30} />
-              <span>Capítulo 155: Túmulo dos Vagalumes</span>
-            </h3>
-
-            <p className={styles.topicInfo}>
-              <IoChatboxEllipsesOutline size={22} />
-              <span>20 Respostas</span>
-            </p>
-          </div>
-        </div>
-
-        <hr className={styles.forumHrFaded} />
-
-        <div className={styles.topicContainer}>
-          <Image
-            className={styles.forumPicture}
-            src={Kon}
-            alt="Forum Picture"
-            width={0}
-            height={0}
-            priority
-          />
-          <div className={styles.topicTexts}>
-            <h3 className={styles.topicTitle}>
-              <MdShortText size={30} />
-              <span>Capítulo 155: Túmulo dos Vagalumes</span>
-            </h3>
-
-            <p className={styles.topicInfo}>
-              <IoChatboxEllipsesOutline size={22} />
-              <span>20 Respostas</span>
-            </p>
-          </div>
-        </div>
-
-        <hr className={styles.forumHrFaded} />
-
-        <div className={styles.topicContainer}>
-          <Image
-            className={styles.forumPicture}
-            src={Kon}
-            alt="Forum Picture"
-            width={0}
-            height={0}
-            priority
-          />
-          <div className={styles.topicTexts}>
-            <h3 className={styles.topicTitle}>
-              <MdShortText size={30} />
-              <span>Capítulo 155: Túmulo dos Vagalumes</span>
-            </h3>
-
-            <p className={styles.topicInfo}>
-              <IoChatboxEllipsesOutline size={22} />
-              <span>20 Respostas</span>
-            </p>
-          </div>
-        </div>
-
-        <hr className={styles.forumHrFaded} />
-
-        <Link
-          className={styles.seeAllForuns}
-          href={`/`}
-          aria-label="Ver todos os depoimentos"
-        >
-          <span>Ver todos</span> <FiMoreHorizontal size={20} />
-        </Link>
+        )}
       </div>
     </section>
   );

@@ -4,8 +4,24 @@
 import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 
+type Bookmark = {
+  title: string;
+  url: string;
+  tags: string[];
+  description: string;
+  public: boolean;
+  likes: number;
+};
+
+type DeliciousUser = {
+  username: string;
+  bookmarks: Bookmark[];
+  followers: string[];
+  following: string[];
+};
+
 // Dados simulados
-const users = [
+const users: DeliciousUser[] = [
   {
     username: "foodie77",
     bookmarks: [
@@ -82,12 +98,14 @@ const sampleTags = [
 const suggestedUsers = ["chef89", "designerPro", "globetrotter"];
 
 export default function DeliciousSocialUI() {
-  const [currentUser, setCurrentUser] = useState(users[0]);
-  const [feed, setFeed] = useState(users.flatMap((u) => u.bookmarks));
-  const [likes, setLikes] = useState(feed.map((b) => b.likes));
+  const [currentUser, setCurrentUser] = useState<DeliciousUser>(users[0]);
+  const [feed, setFeed] = useState<Bookmark[]>(
+    users.flatMap((u) => u.bookmarks),
+  );
+  const [likes, setLikes] = useState<number[]>(feed.map((b) => b.likes));
   const [search, setSearch] = useState("");
-  const [selectedTag, setSelectedTag] = useState(null);
-  const [notifications, setNotifications] = useState([]);
+  const [selectedTag, setSelectedTag] = useState<string | null>(null);
+  const [notifications, setNotifications] = useState<string[]>([]);
   const [profileTab, setProfileTab] = useState("public");
 
   // Feed infinito simulado
@@ -111,7 +129,7 @@ export default function DeliciousSocialUI() {
     return () => clearInterval(interval);
   }, []);
 
-  const toggleLike = (index) => {
+  const toggleLike = (index: number) => {
     const newLikes = [...likes];
     newLikes[index]++;
     setLikes(newLikes);
@@ -245,7 +263,7 @@ export default function DeliciousSocialUI() {
           {/* Perfil */}
           <section className="bg-white p-4 rounded shadow">
             <h2 className="text-xl font-semibold mb-2">
-              {currentUser.username}'s Perfil
+              {currentUser.username}&apos;s Perfil
             </h2>
             <div className="flex gap-2 mb-4">
               <button

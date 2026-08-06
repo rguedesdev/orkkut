@@ -1,0 +1,11 @@
+.page { width: min(960px, calc(100% - 24px)); margin: 40px auto; }
+.form { display: grid; gap: 18px; padding: clamp(18px, 4vw, 34px); border-radius: 12px; background: var(--card-bg-color, #e6ecf6); }
+.form label { display: grid; gap: 6px; font-weight: 600; }
+.form input, .form select, .form textarea { width: 100%; padding: 10px; border: 1px solid #bdc8d8; border-radius: 6px; font: inherit; }
+.grid, .privacy { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; }
+.privacy { padding: 16px; border: 1px solid #bdc8d8; border-radius: 8px; }
+.privacy legend { padding: 0 7px; font-weight: 700; }
+.actions { display: flex; justify-content: flex-end; gap: 10px; }
+.actions button { padding: 10px 16px; }
+.error, .form small { color: #b42318; }
+@media (max-width: 680px) { .grid, .privacy { grid-template-columns: 1fr; } }

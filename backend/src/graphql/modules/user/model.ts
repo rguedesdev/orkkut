@@ -1,40 +1,29 @@
-import { OrkkutDB } from "../../../plugins/mongoose.js";
 import { Schema } from "mongoose";
 
+import { OrkkutDB } from "../../../plugins/mongoose.js";
+
 interface IUserAttributes {
-  fans: number; // Total de fãs (pessoas)
-  cool: number; // Total de votos "legal"
-  sexy: number; // Total de votos "sexy"
-  trustworthy: number; // Total de votos "confiável"
+  fans: number;
+  cool: number;
+  sexy: number;
+  trustworthy: number;
 }
 
 interface IUser {
-  accountType: string;
-  profilePicture: string;
+  accountType: "user" | "admin";
   name: string;
   username: string;
-  email: string;
-  password: string;
-  gender: string;
-  maritalStatus: string;
-  city: string;
-  country: string;
-  phrase: string;
-  whoAmI: string;
-  dateBirth: string;
-  interests: string[];
-  relationship: string;
-  children: string;
-  sexualOrientation: string;
-  smoke: string;
-  drink: string;
-  passions: string[];
-  sports: string[];
-  atividades: string;
+  email?: string | null;
+  passwordHash: string;
+  /** Campo legado, removido pela migration após copiar para passwordHash. */
+  password?: string;
+  /** Agregados legados. Não são mais fonte de verdade das interações sociais. */
   attributes: IUserAttributes;
+  createdAt: Date;
+  updatedAt: Date;
 }
 
-const attributesSchema = new Schema(
+const attributesSchema = new Schema<IUserAttributes>(
   {
     fans: { type: Number, default: 0, min: 0 },
     cool: { type: Number, default: 0, min: 0 },
@@ -46,92 +35,37 @@ const attributesSchema = new Schema(
 
 const userSchema = new Schema<IUser>(
   {
-    accountType: {
-      type: String,
-      default: "user",
-    },
-    profilePicture: {
-      type: String,
-    },
-    name: {
-      type: String,
-      required: true,
-    },
+    accountType: { type: String, enum: ["user", "admin"], default: "user" },
+    name: { type: String, required: true, trim: true, maxlength: 120 },
     username: {
       type: String,
       required: true,
       unique: true,
-      min: 6,
-      max: 15,
+      index: true,
+      minlength: 3,
+      maxlength: 30,
+      lowercase: true,
+      trim: true,
     },
     email: {
       type: String,
-      required: true,
-      unique: true,
+      default: null,
+      lowercase: true,
+      trim: true,
     },
-    password: {
-      type: String,
-      required: true,
-      min: 6,
-      max: 120,
-    },
-    // Não necessário na criação do usuário
-    gender: {
-      type: String,
-    },
-    maritalStatus: {
-      type: String,
-    },
-    city: {
-      type: String,
-    },
-    country: {
-      type: String,
-    },
-    phrase: {
-      type: String,
-    },
-    whoAmI: {
-      type: String,
-    },
-    dateBirth: {
-      type: String,
-    },
-    interests: {
-      type: [String],
-    },
-    relationship: {
-      type: String,
-    },
-    children: {
-      type: String,
-    },
-    sexualOrientation: {
-      type: String,
-    },
-    smoke: {
-      type: String,
-    },
-    drink: {
-      type: String,
-    },
-    passions: {
-      type: [String],
-    },
-    sports: {
-      type: [String],
-    },
-    atividades: {
-      type: String,
-    },
-    attributes: {
-      type: attributesSchema,
-      default: {},
-    },
+    passwordHash: { type: String, required: true, select: false },
+    password: { type: String, required: false, select: false },
+    attributes: { type: attributesSchema, default: {} },
   },
   { timestamps: true },
+);
+
+userSchema.index(
+  { email: 1 },
+  { unique: true, partialFilterExpression: { email: { $type: "string" } } },
 );
 
 const UserModel = OrkkutDB.model<IUser>("User", userSchema);
 
 export { UserModel };
+export type { IUser, IUserAttributes };

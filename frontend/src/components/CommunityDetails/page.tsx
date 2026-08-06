@@ -1,7 +1,4 @@
 // Imports Principais
-import Image from "next/image";
-import Link from "next/link";
-
 // Style Sheet CSS
 import styles from "./communitydetails.module.css";
 
@@ -14,20 +11,11 @@ import { LiaGlobeAmericasSolid } from "react-icons/lia";
 import { FaShieldHalved } from "react-icons/fa6";
 import { RiVipCrownLine } from "react-icons/ri";
 import { FaRegEye } from "react-icons/fa";
+import type { Community } from "@/types/community";
 
-interface ICommunity {
-  name: string;
-  description: string;
-  createdAt: string;
-  category: string;
-  privacy: string;
-  country: string;
-  language: string;
-}
-
-function CommunityDetailsComponent({ community }: { community: ICommunity }) {
+function CommunityDetailsComponent({ community }: { community: Community }) {
   // Função auxiliar para formatar a data
-  const formatDate = (dateValue) => {
+  const formatDate = (dateValue: string) => {
     if (!dateValue) return "Data não disponível";
 
     // Converte para número caso venha como string de timestamp

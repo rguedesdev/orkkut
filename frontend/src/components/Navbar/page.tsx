@@ -1,7 +1,7 @@
 "use client";
 
 // Imports Principais
-import { useState, useEffect, useContext } from "react";
+import { useState, useEffect, useContext, useRef } from "react";
 import Image from "next/image";
 
 // UserContext
@@ -17,9 +17,7 @@ import { ThemeToggle } from "../ThemeToggle/page";
 import { CgProfile } from "react-icons/cg";
 import { MdOutlineViewTimeline } from "react-icons/md";
 
-import { RiHome3Line } from "react-icons/ri";
 import { RiUserCommunityLine } from "react-icons/ri";
-import { MdOutlinePermMedia } from "react-icons/md";
 import { TbHelpSquareRounded } from "react-icons/tb";
 
 import { LiaUserFriendsSolid } from "react-icons/lia";
@@ -29,25 +27,20 @@ import { IoSearch } from "react-icons/io5";
 import { RiArrowDownWideLine } from "react-icons/ri";
 
 import { BsGear } from "react-icons/bs";
-import { HiOutlineLogout } from "react-icons/hi";
 import { TbLogout } from "react-icons/tb";
 
 // Images
 import LogoLight from "../../../public/orkkut_logo1.png";
 import LogoDark from "../../../public/orkkut_logo2.png";
 import Kon from "../../../public/kon.jpg";
-import Marina from "../../../public/marina.jpg";
 
 function Navbar() {
   // const authenticated = useContext(UserContext);
   const [dropdownOpen, setDropdownOpen] = useState(false);
+  const dropdownRef = useRef<HTMLDivElement>(null);
 
   const Context = useContext(UserContext);
-  if (!Context) return null;
-
-  const { userAuthenticated, logout } = Context;
-
-  const [_, forceUpdate] = useState(0);
+  const [, forceUpdate] = useState(0);
 
   useEffect(() => {
     const observer = new MutationObserver(() => {
@@ -62,9 +55,32 @@ function Navbar() {
     return () => observer.disconnect();
   }, []);
 
+  const userAuthenticated = Context?.userAuthenticated ?? false;
+
   useEffect(() => {
     setDropdownOpen(false);
-  }, []);
+  }, [userAuthenticated]);
+
+  useEffect(() => {
+    if (!dropdownOpen) return;
+
+    const closeWhenClickingOutside = (event: PointerEvent) => {
+      if (!dropdownRef.current?.contains(event.target as Node)) setDropdownOpen(false);
+    };
+    const closeWithEscape = (event: KeyboardEvent) => {
+      if (event.key === "Escape") setDropdownOpen(false);
+    };
+
+    document.addEventListener("pointerdown", closeWhenClickingOutside);
+    document.addEventListener("keydown", closeWithEscape);
+    return () => {
+      document.removeEventListener("pointerdown", closeWhenClickingOutside);
+      document.removeEventListener("keydown", closeWithEscape);
+    };
+  }, [dropdownOpen]);
+
+  if (!Context) return null;
+  const { authenticatedUser, logout } = Context;
 
   return (
     <header>
@@ -146,29 +162,33 @@ function Navbar() {
               <div className={styles.navProfilePictureBorder}>
                 <Image
                   className={styles.navProfilePicture}
-                  src={Marina}
-                  alt="Profile Picture"
-                  width={0}
-                  height={0}
+                  src={authenticatedUser?.profile?.avatarImage?.url ?? Kon}
+                  alt={`Foto de perfil de ${authenticatedUser?.name ?? "usuário autenticado"}`}
+                  width={40}
+                  height={40}
                   priority
+                  unoptimized={Boolean(authenticatedUser?.profile?.avatarImage?.url)}
                 />
               </div>
-              <h3 className={styles.navNameNickname}>Marina Penharver</h3>
+              <h3 className={styles.navNameUsername}>
+                {authenticatedUser?.name ?? "Meu perfil"}
+              </h3>
 
               {/* seta que abre/fecha dropdown */}
-              <div className={styles.dropDownContainer}>
-                <RiArrowDownWideLine
-                  className={styles.downArrow}
-                  size={25}
-                  onClick={() => setDropdownOpen(!dropdownOpen)}
-                />
+              <div className={styles.dropDownContainer} ref={dropdownRef}>
+                <button
+                  type="button"
+                  className={styles.dropDownTrigger}
+                  onClick={() => setDropdownOpen((open) => !open)}
+                  aria-expanded={dropdownOpen}
+                  aria-haspopup="menu"
+                  aria-label="Abrir menu do perfil"
+                >
+                  <RiArrowDownWideLine className={styles.downArrow} size={25} />
+                </button>
 
                 {/* menu dropdown */}
-                <div
-                  className={`${styles.dropDownMenu} ${
-                    dropdownOpen ? styles.show : ""
-                  }`}
-                >
+                {dropdownOpen && <div className={`${styles.dropDownMenu} ${styles.show}`}>
                   <ul>
                     <li>
                       <BsGear size={20} />
@@ -180,7 +200,7 @@ function Navbar() {
                       <span>Sair</span>
                     </li>
                   </ul>
-                </div>
+                </div>}
               </div>
               <ThemeToggle />
             </div>

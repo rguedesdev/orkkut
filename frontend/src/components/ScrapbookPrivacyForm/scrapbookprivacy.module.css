@@ -1,0 +1,11 @@
+.form { display: grid; gap: 16px; margin-top: 20px; padding: clamp(18px,4vw,34px); color: var(--text-primary); background: var(--card-bg-color); border-radius: 12px; }
+.form fieldset { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 14px; padding: 16px; border: 1px solid #bdc8d8; border-radius: 8px; }
+.form legend { padding: 0 7px; font-size: 1.3rem; font-weight: 700; }
+.form p { grid-column: 1/-1; }
+.form label { display: grid; gap: 6px; font-weight: 600; }
+.form select { width: 100%; padding: 10px; color: var(--select-text-color); background: var(--select-bg-color); border: 1px solid #bdc8d8; border-radius: 6px; }
+.form .checkbox { grid-column: 1/-1; display: flex; flex-direction: row; align-items: center; }
+.checkbox input { width: auto; }
+.form > button { justify-self: end; padding: 10px 16px; }
+.error { color: #b42318; }
+@media (max-width:680px) { .form fieldset { grid-template-columns: 1fr; } }

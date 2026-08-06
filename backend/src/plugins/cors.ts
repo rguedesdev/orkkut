@@ -4,7 +4,7 @@ import Cors from "@fastify/cors";
 async function registerCors(app: FastifyInstance) {
   await app.register(Cors, {
     origin: "http://localhost:3000",
-    methods: ["POST"],
+    methods: ["GET", "POST", "DELETE", "OPTIONS"],
   });
 }
 

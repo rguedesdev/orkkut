@@ -25,26 +25,38 @@ function HomePage() {
 
     const checkUser = async () => {
       try {
-        const response = await api.post("/graphql", {
-          query: `
-            query {
-              me {
-                id
+        const response = await api.post(
+          "/graphql",
+          {
+            query: `
+              query {
+                me {
+                  id
+                  username
+                }
               }
-            }
-          `,
-          headers: {
-            Authorization: `Bearer ${token}`,
+            `,
           },
-        });
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          },
+        );
 
-        const userId = response.data.data.me?.id;
-        if (userId) {
-          router.push(`/profile/${userId}`);
+        if (response.data.errors?.length) {
+          throw new Error(response.data.errors[0].message);
+        }
+
+        const user = response.data.data.me;
+        if (user?.username) {
+          router.replace(`/profile/${encodeURIComponent(user.username)}`);
         }
       } catch (err) {
         console.error("Erro ao validar usuário:", err);
         localStorage.removeItem("token"); // limpa token inválido
+        localStorage.removeItem("userID");
+        delete api.defaults.headers.Authorization;
       }
     };
 

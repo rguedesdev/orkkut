@@ -28,7 +28,7 @@
   color: #ed2590;
 }
 
-.profileDetailsNameNickname {
+.profileDetailsNameUsername {
   font-size: 2rem;
   font-weight: bold;
 }
@@ -97,6 +97,51 @@
 
 .sexyAttributeIcon {
   color: rgb(204, 5, 5);
+}
+
+.ratingButton {
+  display: inline-flex;
+  padding: 1px;
+  border: 1px solid transparent;
+  border-radius: 4px;
+  background: transparent;
+  cursor: pointer;
+}
+
+.ratingButton:focus-visible {
+  outline: 2px solid #0377b9;
+  outline-offset: 2px;
+}
+
+.ratingDefaultIcon,
+.ratingHoverIcon {
+  display: inline-flex;
+  transition: opacity 0.2s ease;
+}
+
+.ratingHoverIcon {
+  position: absolute;
+  inset: 1px;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+}
+
+.ratingButtonUnfilled {
+  position: relative;
+}
+
+.ratingButtonPreview .ratingDefaultIcon {
+  opacity: 0;
+}
+
+.ratingButtonPreview .ratingHoverIcon {
+  opacity: 1;
+}
+
+.ratingButton:disabled {
+  cursor: wait;
+  opacity: 0.65;
 }
 
 .userInfoExtendedContainer {
