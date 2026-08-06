@@ -2,6 +2,8 @@ class UserValidation {
   static signUp(data: any) {
     if (!data.name) throw new Error("O nome é obrigatório!");
 
+    if (!data.username) throw new Error("O nome de usuario é obrigatório!");
+
     if (!data.email) throw new Error("O email é obrigatório!");
 
     if (!data.password) throw new Error("A senha é obrigatória!");

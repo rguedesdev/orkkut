@@ -15,7 +15,7 @@ const userTypeDefs = /* GraphQL */ `
   type User {
     id: ID!
     name: String!
-    nickname: String!
+    username: String!
     email: String!
     attributes: Attributes
   }
@@ -37,7 +37,7 @@ const userTypeDefs = /* GraphQL */ `
   input SignUpInput {
     invitation: String!
     name: String!
-    nickname: String!
+    username: String!
     email: String!
     password: String!
   }

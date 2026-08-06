@@ -18,7 +18,7 @@ import { getUserByToken } from "../../../services/auth/get-user-by-token.js";
 const SignUpSchema = z
   .object({
     name: z.string().trim().nonempty(),
-    nickname: z.string().trim().nonempty(),
+    username: z.string().trim().nonempty(),
     email: z.email().trim(),
     password: z.string().trim().min(6).max(120),
     confirmPassword: z.string().trim().min(6).max(120),
@@ -77,7 +77,7 @@ class UserService {
       user: {
         id: newUser._id.toString(),
         name: newUser.name,
-        nickname: newUser.nickname,
+        username: newUser.username,
         email: newUser.email,
         attributes: {
           fans: newUser.attributes?.fans ?? 0,
@@ -135,7 +135,7 @@ class UserService {
     return {
       id: user._id.toString(),
       name: user.name,
-      nickname: user.nickname,
+      username: user.username,
       email: user.email,
       attributes: {
         fans: user.attributes?.fans ?? 0,
@@ -154,7 +154,7 @@ class UserService {
     const users = await UserModel.find({
       $or: [
         { name: { $regex: search, $options: "i" } },
-        { nickname: { $regex: search, $options: "i" } },
+        { username: { $regex: search, $options: "i" } },
       ],
     }).lean();
 

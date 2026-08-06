@@ -12,7 +12,7 @@ interface IUser {
   accountType: string;
   profilePicture: string;
   name: string;
-  nickname: string;
+  username: string;
   email: string;
   password: string;
   gender: string;
@@ -57,7 +57,7 @@ const userSchema = new Schema<IUser>(
       type: String,
       required: true,
     },
-    nickname: {
+    username: {
       type: String,
       required: true,
       unique: true,
