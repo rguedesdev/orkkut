@@ -9,16 +9,16 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { ToastContainer, toast } from "react-toastify";
 
 // Style Sheet CSS
-import styles from "./signupcomponente.module.css";
+import styles from "./signupcomponent.module.css";
 
 // Componentes
-import { Input } from "../Input/page";
+import { InputComponent } from "../Input/page";
 
 // Schema Zod para SignUp
 const CreateSignUpSchema = z
   .object({
     name: z.string().trim().nonempty("O nome é obrigatório!"),
-    nickname: z.string().trim().nonempty("O nickname é obrigatório!"),
+    username: z.string().trim().nonempty("O username é obrigatório!"),
     email: z.email("O email é obrigatório!").trim(),
     password: z
       .string()
@@ -71,7 +71,7 @@ function SignUpComponent() {
 
       await signUp(
         data.name,
-        data.nickname,
+        data.username,
         data.email,
         data.password,
         data.confirmPassword,
@@ -88,12 +88,12 @@ function SignUpComponent() {
   return (
     <section aria-labelledby={styles.loginTitle}>
       <div className={styles.signUpBox}>
-        <h1 id="loginTitle" className={styles.loginTitle}>
+        <h1 id="loginTitle" className={styles.signUpTitle}>
           Cadastre-se
         </h1>
 
         <form onSubmit={handleSubmit(handleSignUp)} autoComplete="off">
-          <Input
+          <InputComponent
             inputLabel="Name"
             inputType="text"
             inputID="name"
@@ -102,16 +102,16 @@ function SignUpComponent() {
             error={errors.name?.message}
           />
 
-          <Input
-            inputLabel="Nickname"
+          <InputComponent
+            inputLabel="Username"
             inputType="text"
-            inputID="nickname"
-            inputPlaceholder="Digite o seu nome Nickname"
-            register={register("nickname")}
-            error={errors.nickname?.message}
+            inputID="username"
+            inputPlaceholder="Digite o seu nome username"
+            register={register("username")}
+            error={errors.username?.message}
           />
 
-          <Input
+          <InputComponent
             inputLabel="Email"
             inputType="email"
             inputID="email"
@@ -120,7 +120,7 @@ function SignUpComponent() {
             error={errors.email?.message}
           />
 
-          <Input
+          <InputComponent
             inputLabel="Senha"
             inputType="password"
             inputID="password"
@@ -129,7 +129,7 @@ function SignUpComponent() {
             error={errors.password?.message}
           />
 
-          <Input
+          <InputComponent
             inputLabel="Confirme a Senha"
             inputType="password"
             inputID="confirmPassword"
@@ -138,7 +138,7 @@ function SignUpComponent() {
             error={errors.confirmPassword?.message}
           />
 
-          <Input
+          <InputComponent
             inputLabel="Convite"
             inputType="text"
             inputID="invitation"

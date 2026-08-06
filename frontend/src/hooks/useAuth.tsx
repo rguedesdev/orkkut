@@ -85,7 +85,7 @@ function useAuth() {
 
   async function signUp(
     name: string,
-    nickname: string,
+    username: string,
     email: string,
     password: string,
     confirmPassword: string,
@@ -98,7 +98,7 @@ function useAuth() {
             user {
               id
               name
-              nickname
+              username
               email
             }
             token
@@ -107,7 +107,7 @@ function useAuth() {
     `;
 
       const variables = {
-        data: { name, nickname, email, password, invitation },
+        data: { name, username, email, password, invitation },
         confirmPassword,
       };
 
